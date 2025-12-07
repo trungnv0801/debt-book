@@ -24,3 +24,14 @@ export const getDaysUntilDue = (dueDate: string) => {
   const diff = Math.ceil((due - today) / (1000 * 60 * 60 * 24))
   return diff
 }
+
+export const summarizeByPerson = (debts: Debt[]) => {
+  const summary: Record<string, number> = {}
+
+  debts.forEach((d) => {
+    if (!summary[d.personName]) summary[d.personName] = 0
+    summary[d.personName] += d.amount
+  })
+
+  return summary
+}

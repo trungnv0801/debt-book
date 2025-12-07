@@ -27,6 +27,9 @@ const debt = {
     noLendTransactions: 'No lending transactions yet',
     noBorrowTransactions: 'No borrowing transactions yet',
   },
+  summaryByPerson: 'Summary by Person',
+  searchPerson: 'Search Person',
+  noMatchingPerson: 'No matching person found',
 }
 
 export default debt

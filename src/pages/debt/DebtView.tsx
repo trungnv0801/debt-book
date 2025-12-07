@@ -9,6 +9,7 @@ import DebtList from './components/DebtList'
 import Summary from './components/Summary'
 import { INITIAL_DEBT } from './shared'
 import { TYPE_BORROWED, TYPE_LENT } from './shared/constant'
+import { PersonSummary } from './components/PersonSummary'
 
 const DebtView: React.FC = () => {
   const { t } = useTranslation()
@@ -54,6 +55,8 @@ const DebtView: React.FC = () => {
         </div>
 
         <Summary lentDebts={lentDebts} borrowedDebts={borrowedDebts} />
+
+        <PersonSummary lentDebts={lentDebts} borrowedDebts={borrowedDebts} />
 
         <div className="mb-6 flex gap-3">
           <button
