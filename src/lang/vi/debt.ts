@@ -27,6 +27,9 @@ const debt = {
     noLendTransactions: 'Chưa có giao dịch cho mượn',
     noBorrowTransactions: 'Chưa có giao dịch đi mượn',
   },
+  summaryByPerson: 'Tổng theo từng người',
+  searchPerson: 'Tìm theo tên...',
+  noMatchingPerson: 'Không tìm thấy người phù hợp',
 }
 
 export default debt
