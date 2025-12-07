@@ -1,14 +1,27 @@
-import { Routes, Route } from 'react-router-dom'
-import Home from '@/pages/Home'
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import Layout from '@/layouts/Layout'
 import Pages from '@/pages'
+import PrivateRoute from '@/router/PrivateRouter'
 
 function App() {
   return (
-    <Routes>
-      <Route path="/home" element={<Home />} />
-      <Route path="/login" element={<Pages.LoginView />} />
-      <Route path="*" element={<Pages.NotFoundView />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route
+            index
+            element={
+              <PrivateRoute>
+                <Pages.DebtView />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+
+        <Route path="/login" element={<Pages.LoginView />} />
+        <Route path="*" element={<Pages.NotFoundView />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

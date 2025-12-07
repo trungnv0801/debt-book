@@ -1,16 +1,16 @@
 import React, { Suspense } from 'react'
-import { BrowserRouter } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import '@/lang/index'
 import '@/assets/index.css'
 import App from '@/App'
+import { AuthProvider } from '@/providers'
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Suspense>
-      <BrowserRouter>
+    <AuthProvider>
+      <Suspense>
         <App />
-      </BrowserRouter>
-    </Suspense>
+      </Suspense>
+    </AuthProvider>
   </React.StrictMode>,
 )
