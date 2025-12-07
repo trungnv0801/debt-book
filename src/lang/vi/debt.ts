@@ -3,6 +3,7 @@ const debt = {
   subtitle: 'Theo dõi tiền cho mượn và đi mượn',
   addTransaction: 'Thêm Giao Dịch',
   addNewTraction: 'Thêm Giao Dịch Mới',
+  updateTransaction: 'Chỉnh Sửa Giao Dịch',
   owedToMe: 'Người khác nợ tôi',
   iOwe: 'Tôi nợ người khác',
   people: '{{count}} người',

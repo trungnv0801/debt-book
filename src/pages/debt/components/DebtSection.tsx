@@ -9,6 +9,7 @@ interface DebtSectionProps {
   debts: Debt[]
   emptyText: string
   onDelete: (id: string) => void
+  onEdit: (debt: Debt) => void
 }
 
 export const DebtSection: React.FC<DebtSectionProps> = ({
@@ -17,6 +18,7 @@ export const DebtSection: React.FC<DebtSectionProps> = ({
   debts,
   emptyText,
   onDelete,
+  onEdit,
 }) => {
   const icon =
     type === TYPE_LENT ? (
@@ -39,6 +41,7 @@ export const DebtSection: React.FC<DebtSectionProps> = ({
             debt={debt}
             color={type === TYPE_LENT ? 'green' : 'red'}
             onDelete={onDelete}
+            onEdit={onEdit}
           />
         ))}
 

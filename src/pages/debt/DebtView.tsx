@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PlusCircle } from 'lucide-react'
 import { useDebts } from '@/hooks/debt'
@@ -13,35 +13,52 @@ import { PersonSummary } from './components/PersonSummary'
 
 const DebtView: React.FC = () => {
   const { t } = useTranslation()
-
-  const { debts, loading, addDebt, getDebts, deleteDebt } = useDebts()
-  const [showAddForm, setShowAddForm] = useState(false)
+  const formRef = useRef<HTMLDivElement>(null)
+  const { debts, loading, addDebt, getDebts, deleteDebt, editDebt } = useDebts()
+  const [showForm, setShowForm] = useState(false)
 
   const [newDebt, setNewDebt] = useState<Debt>(INITIAL_DEBT)
 
   const lentDebts = debts.filter((d) => d.type === TYPE_LENT)
   const borrowedDebts = debts.filter((d) => d.type === TYPE_BORROWED)
 
-  const handleAddDebt = async () => {
-    if (newDebt.personName && newDebt.amount && newDebt.date) {
-      await addDebt({
-        type: newDebt.type,
-        personName: newDebt.personName,
-        amount: newDebt.amount,
-        date: newDebt.date,
-        dueDate: newDebt.dueDate,
-        note: newDebt.note,
-      })
-      setNewDebt(INITIAL_DEBT)
-      setShowAddForm(false)
+  const handleSubmit = async () => {
+    const { id, personName, amount, date, type, dueDate, note } = newDebt
+
+    if (!personName || !amount || !date) return
+
+    const payload = {
+      type,
+      personName: personName.trim(),
+      amount,
+      date,
+      dueDate,
+      note,
     }
+
+    const action = id ? editDebt(id, payload) : addDebt(payload)
+    await action
+
+    setNewDebt(INITIAL_DEBT)
+    setShowForm(false)
   }
 
   const handleDeleteDebt = (id: string) => deleteDebt(id)
 
+  const handleEditDebt = (debt: Debt) => {
+    setNewDebt(debt)
+    setShowForm(true)
+  }
+
   useEffect(() => {
     getDebts()
   }, [getDebts])
+
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [showForm, newDebt.id])
 
   return (
     <div className="relative">
@@ -60,7 +77,7 @@ const DebtView: React.FC = () => {
 
         <div className="mb-6 flex gap-3">
           <button
-            onClick={() => setShowAddForm(!showAddForm)}
+            onClick={() => setShowForm(!showForm)}
             className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg"
           >
             <PlusCircle className="w-5 h-5" />
@@ -68,10 +85,11 @@ const DebtView: React.FC = () => {
           </button>
         </div>
 
-        {showAddForm && (
+        {showForm && (
           <DebtForm
-            handleAddDebt={handleAddDebt}
-            setShowAddForm={setShowAddForm}
+            ref={formRef}
+            handleSubmit={handleSubmit}
+            setShowAddForm={setShowForm}
             newDebt={newDebt}
             setNewDebt={setNewDebt}
           />
@@ -79,6 +97,7 @@ const DebtView: React.FC = () => {
 
         <DebtList
           handleDeleteDebt={handleDeleteDebt}
+          handleEditDebt={handleEditDebt}
           lentDebts={lentDebts}
           borrowedDebts={borrowedDebts}
         />

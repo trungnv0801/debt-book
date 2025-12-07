@@ -7,12 +7,14 @@ interface DebtListProps {
   lentDebts: Debt[]
   borrowedDebts: Debt[]
   handleDeleteDebt: (id: string) => void
+  handleEditDebt: (debt: Debt) => void
 }
 
 const DebtList: React.FC<DebtListProps> = ({
   lentDebts,
   borrowedDebts,
   handleDeleteDebt,
+  handleEditDebt,
 }) => {
   const { t } = useTranslation()
 
@@ -24,6 +26,7 @@ const DebtList: React.FC<DebtListProps> = ({
         debts={lentDebts}
         emptyText={t('debt.list.noLendTransactions')}
         onDelete={handleDeleteDebt}
+        onEdit={handleEditDebt}
       />
 
       <DebtSection
@@ -32,6 +35,7 @@ const DebtList: React.FC<DebtListProps> = ({
         debts={borrowedDebts}
         emptyText={t('debt.list.noBorrowTransactions')}
         onDelete={handleDeleteDebt}
+        onEdit={handleEditDebt}
       />
     </div>
   )
