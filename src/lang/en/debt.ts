@@ -2,6 +2,7 @@ const debt = {
   title: 'Debt Book',
   subtitle: 'Track money lent and borrowing',
   addTransaction: 'Add Transaction',
+  updateTransaction: 'Update Transaction',
   addNewTransaction: 'Add New Transaction',
   owedToMe: 'Others owe me',
   iOwe: 'I owe others',

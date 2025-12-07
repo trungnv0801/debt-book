@@ -1,4 +1,4 @@
-import { Calendar, Trash2, User } from 'lucide-react'
+import { Calendar, Trash2, User, Edit } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Debt } from '@/types'
 import { formatCurrency, getDaysUntilDue } from '../shared'
@@ -7,12 +7,14 @@ interface DebtCardProps {
   debt: Debt
   color: 'red' | 'green'
   onDelete: (id: string) => void
+  onEdit: (debt: Debt) => void
 }
 
 export const DebtCard: React.FC<DebtCardProps> = ({
   debt,
   color,
   onDelete,
+  onEdit,
 }) => {
   const { t, i18n } = useTranslation()
   const daysUntilDue = getDaysUntilDue(debt.dueDate)
@@ -42,12 +44,20 @@ export const DebtCard: React.FC<DebtCardProps> = ({
           </div>
         </div>
 
-        <button
-          onClick={() => onDelete(debt.id)}
-          className="text-slate-400 hover:text-red-400 transition-colors"
-        >
-          <Trash2 className="w-5 h-5" />
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={() => onEdit(debt)}
+            className="text-slate-400 hover:text-red-400 transition-colors"
+          >
+            <Edit className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => onDelete(debt.id)}
+            className="text-slate-400 hover:text-red-400 transition-colors"
+          >
+            <Trash2 className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       <div className="flex items-center gap-4 text-sm text-slate-400">

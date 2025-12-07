@@ -1,27 +1,37 @@
 import { Debt } from '@/types/debt'
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { INITIAL_DEBT } from '../shared'
+import { useState } from 'react'
 
 interface DebtFormProps {
   newDebt: Debt
+  ref: React.Ref<HTMLDivElement>
   setNewDebt: React.Dispatch<React.SetStateAction<Debt>>
-  handleAddDebt: () => void
+  handleSubmit: () => void
   setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const DebtForm: React.FC<DebtFormProps> = ({
   newDebt,
+  ref,
   setNewDebt,
-  handleAddDebt,
+  handleSubmit,
   setShowAddForm,
 }) => {
   const { t } = useTranslation()
+  const [displayAmount, setDisplayAmount] = useState('')
 
   return (
     <>
-      <div className="bg-slate-800 rounded-2xl p-6 mb-6 shadow-xl border border-slate-700">
+      <div
+        ref={ref}
+        className="bg-slate-800 rounded-2xl p-6 mb-6 shadow-xl border border-slate-700"
+      >
         <h3 className="text-xl font-bold text-white mb-4">
-          {t('debt.addNewTransaction')}
+          {newDebt.id
+            ? t('debt.updateTransaction')
+            : t('debt.addNewTransaction')}
         </h3>
 
         {/* Type Selection */}
@@ -64,13 +74,16 @@ const DebtForm: React.FC<DebtFormProps> = ({
             type="text"
             inputMode="numeric"
             placeholder={t('debt.form.amount')}
-            value={newDebt.amount}
+            value={displayAmount}
             onChange={(e) => {
               const value = e.target.value
               const cleaned = value
                 .replace(/^0+(?=\d)/, '')
                 .replace(/[^0-9]/g, '')
               setNewDebt({ ...newDebt, amount: +cleaned })
+              setDisplayAmount(
+                cleaned ? cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '',
+              )
             }}
             className="bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -108,13 +121,16 @@ const DebtForm: React.FC<DebtFormProps> = ({
         </div>
         <div className="flex gap-3 mt-4">
           <button
-            onClick={() => handleAddDebt()}
+            onClick={() => handleSubmit()}
             className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl font-semibold transition-all"
           >
             {t('debt.form.save')}
           </button>
           <button
-            onClick={() => setShowAddForm(false)}
+            onClick={() => {
+              setShowAddForm(false)
+              setNewDebt(INITIAL_DEBT)
+            }}
             className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded-xl font-semibold transition-all"
           >
             {t('debt.form.cancel')}
