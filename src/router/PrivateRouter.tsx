@@ -1,10 +1,15 @@
-import React from 'react'
-import { ACCESS_TOKEN } from '@/utils/constants'
-import { Navigate, Outlet } from 'react-router-dom'
+import { JSX } from 'react'
+import { Navigate } from 'react-router-dom'
+import Loading from '@/components/common/Loading'
+import { useAuthContext } from '@/hooks/auth'
 
-const PrivateRouter: React.FC = () => {
-  const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  return accessToken ? <Outlet /> : <Navigate to="/login" />
+const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+  const { loading, loggedIn } = useAuthContext()
+  if (loading) return <Loading />
+
+  if (!loggedIn) return <Navigate to="/login" replace />
+
+  return children
 }
 
-export default PrivateRouter
+export default PrivateRoute

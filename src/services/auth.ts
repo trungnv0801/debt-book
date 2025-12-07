@@ -1,16 +1,32 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from '@/firebase/config'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 
 export const loginUser = async (email: string, password: string) => {
   const userCredential = await signInWithEmailAndPassword(auth, email, password)
   const user = userCredential.user
 
-  const userRef = doc(db, 'users', user.uid)
-  const userSnap = await getDoc(userRef)
+  const ref = doc(db, 'users', user.uid)
+  const snap = await getDoc(ref)
+
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      email,
+      createdAt: new Date(),
+    })
+  }
+
+  const data = (await getDoc(ref)).data()
+
   return {
     uid: user.uid,
     email: user.email,
-    ...userSnap.data(),
+    ...data,
   }
+}
+
+export const checkUserExists = async (uid: string) => {
+  const ref = doc(db, 'users', uid)
+  const snap = await getDoc(ref)
+  return snap.exists()
 }
