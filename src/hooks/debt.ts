@@ -75,6 +75,7 @@ export const useDebts = () => {
     },
     [uid],
   )
+
   const editDebt = useCallback(
     async (debtId: string, updated: Partial<Omit<Debt, 'id'>>) => {
       if (!uid) return
