@@ -1,7 +1,7 @@
 import { ArrowDownCircle, ArrowUpCircle, DollarSign } from 'lucide-react'
 import { Debt } from '@/types/debt'
 import { useTranslation } from 'react-i18next'
-import { formatCurrency } from '../shared'
+import { formatCurrency, summarizeByPerson } from '../shared'
 
 interface SummaryProps {
   lentDebts: Debt[]
@@ -29,7 +29,7 @@ const Summary: React.FC<SummaryProps> = ({ lentDebts, borrowedDebts }) => {
             </div>
           </div>
           <div className="text-sm text-green-100">
-            {t('debt.people', { count: lentDebts.length })}
+            {t('debt.people', { count: Object.keys(summarizeByPerson(lentDebts)).length })}
           </div>
         </div>
 
@@ -44,7 +44,7 @@ const Summary: React.FC<SummaryProps> = ({ lentDebts, borrowedDebts }) => {
             </div>
           </div>
           <div className="text-sm text-red-100">
-            {t('debt.people', { count: borrowedDebts.length })}
+            {t('debt.people', { count: Object.keys(summarizeByPerson(borrowedDebts)).length })}
           </div>
         </div>
 
