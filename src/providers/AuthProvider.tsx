@@ -6,27 +6,20 @@ import { useEffect, useState } from 'react'
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [uid, setUid] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
-  const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect(() => {
     const verify = async () => {
       const stored = localStorage.getItem(UID)
 
       if (!stored) {
-        setLoggedIn(false)
+        setUid(null)
         setLoading(false)
         return
       }
 
       const ok = await checkUserExists(stored)
 
-      if (ok) {
-        setUid(stored)
-        setLoggedIn(true)
-      } else {
-        setLoggedIn(false)
-      }
-
+      setUid(ok ? stored : null)
       setLoading(false)
     }
 
@@ -34,7 +27,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ uid, loading, loggedIn, setUid }}>
+    <AuthContext.Provider
+      value={{
+        uid,
+        loading,
+        loggedIn: !!uid,
+        setUid,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )

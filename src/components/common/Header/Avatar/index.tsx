@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useAuth } from '@/hooks/auth'
 
 const AvatarDropdown = () => {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const avatarRef = useRef<HTMLButtonElement>(null)
+  const { logout, loading } = useAuth()
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -49,27 +51,26 @@ const AvatarDropdown = () => {
             aria-orientation="vertical"
             aria-labelledby="user-menu"
           >
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-white hover:bg-gray-100"
+            <button
+              className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
               role="menuitem"
             >
               Your Profile
-            </a>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-white hover:bg-gray-100"
+            </button>
+            <button
+              className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
               role="menuitem"
             >
               Settings
-            </a>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-white hover:bg-gray-100"
+            </button>
+            <button
+              onClick={logout}
+              disabled={loading}
+              className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
               role="menuitem"
             >
               Sign out
-            </a>
+            </button>
           </div>
         )}
       </div>

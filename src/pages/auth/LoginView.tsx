@@ -41,7 +41,7 @@ const Login: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="text-slate-400 text-sm block mb-2">
-                {t('auth.forgotPassword')}
+                {t('auth.email')}
               </label>
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
