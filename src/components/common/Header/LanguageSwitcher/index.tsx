@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Globe } from 'lucide-react'
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation()
@@ -10,8 +11,9 @@ const LanguageSwitcher: React.FC = () => {
   return (
     <button
       onClick={toggleLanguage}
-      className="px-3 py-1 rounded-md bg-slate-100 text-slate-900 font-medium hover:bg-slate-200 transition-colors"
+      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
     >
+      <Globe className="w-4 h-4" />
       {i18n.language === 'en' ? 'Vietnamese' : 'Tiếng Anh'}
     </button>
   )

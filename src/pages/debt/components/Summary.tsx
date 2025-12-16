@@ -29,7 +29,9 @@ const Summary: React.FC<SummaryProps> = ({ lentDebts, borrowedDebts }) => {
             </div>
           </div>
           <div className="text-sm text-green-100">
-            {t('debt.people', { count: Object.keys(summarizeByPerson(lentDebts)).length })}
+            {t('debt.people', {
+              count: Object.keys(summarizeByPerson(lentDebts)).length,
+            })}
           </div>
         </div>
 
@@ -44,7 +46,9 @@ const Summary: React.FC<SummaryProps> = ({ lentDebts, borrowedDebts }) => {
             </div>
           </div>
           <div className="text-sm text-red-100">
-            {t('debt.people', { count: Object.keys(summarizeByPerson(borrowedDebts)).length })}
+            {t('debt.people', {
+              count: Object.keys(summarizeByPerson(borrowedDebts)).length,
+            })}
           </div>
         </div>
 
