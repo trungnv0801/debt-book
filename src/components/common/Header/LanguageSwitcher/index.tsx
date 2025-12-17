@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Globe } from 'lucide-react'
 
-const LanguageSwitcher: React.FC = () => {
+export default function LanguageSwitcher() {
   const { i18n } = useTranslation()
 
   const toggleLanguage = () => {
@@ -18,5 +18,3 @@ const LanguageSwitcher: React.FC = () => {
     </button>
   )
 }
-
-export default LanguageSwitcher

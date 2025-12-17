@@ -11,7 +11,7 @@ import { INITIAL_DEBT } from './shared'
 import { TYPE_BORROWED, TYPE_LENT } from './shared/constant'
 import { PersonSummary } from './components/PersonSummary'
 
-const DebtView: React.FC = () => {
+export default function DebtView() {
   const { t } = useTranslation()
   const formRef = useRef<HTMLDivElement>(null)
   const { debts, loading, addDebt, getDebts, deleteDebt, editDebt } = useDebts()
@@ -105,5 +105,3 @@ const DebtView: React.FC = () => {
     </div>
   )
 }
-
-export default DebtView
