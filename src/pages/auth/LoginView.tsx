@@ -5,7 +5,7 @@ import { Lock, User, Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '@/hooks/auth'
 import LanguageSwitcher from '@/components/common/Header/LanguageSwitcher'
 
-const Login: React.FC = () => {
+export default function LoginView() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { login, loading, error } = useAuth()
@@ -138,5 +138,3 @@ const Login: React.FC = () => {
     </div>
   )
 }
-
-export default Login
