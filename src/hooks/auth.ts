@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loginUser, logoutUser } from '@/services/auth'
+import { loginUser, logoutUser, resetPasswordUser } from '@/services/auth'
 import { UID } from '@/utils'
 import { AuthContext } from '@/contexts/AuthContext'
 
@@ -9,6 +9,7 @@ export const useAuth = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const login = async (email: string, password: string) => {
     try {
@@ -44,7 +45,22 @@ export const useAuth = () => {
     }
   }
 
-  return { login, logout, loading, error }
+  const resetPassword = async (email: string) => {
+    try {
+      setLoading(true)
+      setError(null)
+
+      await resetPasswordUser(email)
+      setIsSuccess(true)
+    } catch (err: any) {
+      setError(err.message)
+      setIsSuccess(false)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { login, logout, resetPassword, loading, error, isSuccess }
 }
 
 export const useAuthContext = () => useContext(AuthContext)

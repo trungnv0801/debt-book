@@ -21,7 +21,7 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
+    <div className="min-h-[100dvh] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <div className="flex justify-end mb-4">
           <LanguageSwitcher />
@@ -89,8 +89,11 @@ const Login: React.FC = () => {
             </div>
 
             <div className="flex text-sm">
-              <button className="ml-auto text-blue-400 hover:text-blue-300 transition-colors">
-                {t('auth.forgotPassword')}
+              <button
+                onClick={() => navigate('/forgot-password')}
+                className="ml-auto text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                {t('auth.login.forgotPassword')}
               </button>
             </div>
 
@@ -100,9 +103,11 @@ const Login: React.FC = () => {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !email || !password}
               className={`w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-lg ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
+                loading || !email || !password
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ''
               }`}
             >
               {loading ? (

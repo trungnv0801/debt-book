@@ -1,4 +1,8 @@
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  sendPasswordResetEmail,
+} from 'firebase/auth'
 import { auth, db } from '@/firebase/config'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 
@@ -33,4 +37,12 @@ export const checkUserExists = async (uid: string) => {
 
 export const logoutUser = async () => {
   await signOut(auth)
+}
+
+export const resetPasswordUser = async (email: string) => {
+  const redirectUrl = import.meta.env.VITE_APP_URL || window.location.origin
+
+  await sendPasswordResetEmail(auth, email, {
+    url: `${redirectUrl}/login`,
+  })
 }
