@@ -1,6 +1,12 @@
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loginUser, logoutUser, resetPasswordUser } from '@/services/auth'
+import {
+  confirmResetPassword,
+  loginUser,
+  logoutUser,
+  resetPasswordUser,
+  verifyResetPasswordCode,
+} from '@/services/auth'
 import { UID } from '@/utils'
 import { AuthContext } from '@/contexts/AuthContext'
 
@@ -10,6 +16,7 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [isValidOobCode, setIsValidOobCode] = useState(false)
 
   const login = async (email: string, password: string) => {
     try {
@@ -60,7 +67,47 @@ export const useAuth = () => {
     }
   }
 
-  return { login, logout, resetPassword, loading, error, isSuccess }
+  const verifyResetCode = useCallback(async (oobCode: string) => {
+    try {
+      setLoading(true)
+      setError(null)
+
+      await verifyResetPasswordCode(oobCode)
+      setIsValidOobCode(true)
+    } catch (err: any) {
+      setError(err.message)
+      setIsValidOobCode(false)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const resetPasswordConfirm = async (oobCode: string, newPassword: string) => {
+    try {
+      setLoading(true)
+      setError(null)
+
+      await confirmResetPassword(oobCode, newPassword)
+      setIsSuccess(true)
+    } catch (err: any) {
+      setError(err.message)
+      setIsSuccess(false)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return {
+    login,
+    logout,
+    resetPassword,
+    verifyResetCode,
+    resetPasswordConfirm,
+    isValidOobCode,
+    loading,
+    error,
+    isSuccess,
+  }
 }
 
 export const useAuthContext = () => useContext(AuthContext)

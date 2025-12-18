@@ -31,6 +31,43 @@ const auth = {
     emailSentHint:
       'Vui lòng kiểm tra hộp thư đến của bạn và nhấp vào liên kết để đặt lại mật khẩu. Liên kết sẽ hết hạn sau 1 giờ.',
   },
+  resetPassword: {
+    title: 'Đặt Lại Mật Khẩu',
+    success: 'Mật khẩu đã được thay đổi',
+    default: 'Tạo mật khẩu mới cho tài khoản của bạn',
+    form: {
+      title: 'Tạo Mật Khẩu Mới',
+      newPassword: 'Mật khẩu mới',
+      confirmPassword: 'Xác nhận mật khẩu',
+      placeholderPassword: 'Nhập mật khẩu mới',
+      placeholderConfirm: 'Nhập lại mật khẩu mới',
+      strength: 'Độ mạnh mật khẩu',
+      requirements: 'Yêu cầu mật khẩu:',
+      submit: 'Đặt Lại Mật Khẩu',
+      processing: 'Đang xử lý...',
+      successTitle: 'Thành Công!',
+      successMessage:
+        'Mật khẩu của bạn đã được đặt lại thành công. Bạn có thể đăng nhập bằng mật khẩu mới.',
+      backToLogin: 'Đăng Nhập Ngay',
+    },
+    verifying: 'Đang xác thực...',
+    backToLogin: 'Quay lại đăng nhập',
+    noCode: {
+      title: 'Thiếu Liên Kết',
+      description:
+        'Link đặt lại mật khẩu không được cung cấp. Vui lòng sử dụng link từ email.',
+      requestNew: 'Yêu Cầu Link Mới',
+    },
+    invalidCode: {
+      title: 'Liên Kết Không Hợp Lệ',
+      description: 'Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.',
+      reasons: 'Có thể do:',
+      expired: 'Link đã hết hạn (sau 1 giờ)',
+      used: 'Link đã được sử dụng',
+      invalid: 'Link không đúng định dạng',
+      requestNew: 'Yêu Cầu Link Mới',
+    },
+  },
 }
 
 export default auth

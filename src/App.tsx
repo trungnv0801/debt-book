@@ -20,6 +20,7 @@ function App() {
 
         <Route path="/login" element={<Pages.LoginView />} />
         <Route path="/forgot-password" element={<Pages.ForgotPasswordView />} />
+        <Route path="/reset-password" element={<Pages.ResetPasswordView />} />
         <Route path="*" element={<Pages.NotFoundView />} />
       </Routes>
     </BrowserRouter>
