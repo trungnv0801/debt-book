@@ -2,6 +2,9 @@ import {
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
+  validatePassword,
 } from 'firebase/auth'
 import { auth, db } from '@/firebase/config'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
@@ -45,4 +48,20 @@ export const resetPasswordUser = async (email: string) => {
   await sendPasswordResetEmail(auth, email, {
     url: `${redirectUrl}/login`,
   })
+}
+
+export const verifyResetPasswordCode = async (oobCode: string) => {
+  return verifyPasswordResetCode(auth, oobCode)
+}
+
+export const confirmResetPassword = async (
+  oobCode: string,
+  newPassword: string,
+) => {
+  return confirmPasswordReset(auth, oobCode, newPassword)
+}
+
+export const getPasswordRules = async () => {
+  const validation = await validatePassword(auth, '')
+  return validation.passwordPolicy
 }
