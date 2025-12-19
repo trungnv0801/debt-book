@@ -26,6 +26,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEBT_MANAGER_WEB }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_DEBT_BOOK }}
           channelId: live
-          projectId: debt-manager-web
+          projectId: my-debt-book
