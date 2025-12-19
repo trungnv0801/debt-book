@@ -25,7 +25,8 @@ export default function ResetPasswordForm(props: Props) {
   const { resetPasswordConfirm, loading, isSuccess } = useAuth()
   const { firstError, isValid } = usePasswordRules(formData.password)
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
     const newErrors = {
       password: !isValid && firstError ? firstError.label : '',
       confirmPassword:
@@ -73,6 +74,7 @@ export default function ResetPasswordForm(props: Props) {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  tabIndex={-1}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -90,7 +92,7 @@ export default function ResetPasswordForm(props: Props) {
               )}
             </div>
 
-            <div>
+            <form onSubmit={handleSubmit}>
               <label className="text-slate-400 text-sm block mb-2">
                 {t('auth.resetPassword.form.confirmPassword')}
               </label>
@@ -118,6 +120,7 @@ export default function ResetPasswordForm(props: Props) {
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
+                  tabIndex={-1}
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -132,12 +135,18 @@ export default function ResetPasswordForm(props: Props) {
                   {errors.confirmPassword}
                 </div>
               )}
-            </div>
+            </form>
 
             <button
-              onClick={handleSubmit}
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-xl"
+              type="submit"
+              disabled={
+                loading || !formData.password || !formData.confirmPassword
+              }
+              className={`w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-lg ${
+                loading || !formData.password || !formData.confirmPassword
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ''
+              }`}
             >
               {loading
                 ? t('auth.resetPassword.form.processing')
@@ -155,6 +164,7 @@ export default function ResetPasswordForm(props: Props) {
             {t('auth.resetPassword.form.successMessage')}
           </p>
           <button
+            type="button"
             onClick={() => navigate('/login')}
             className="w-full bg-blue-600 text-white py-3 rounded-xl"
           >
