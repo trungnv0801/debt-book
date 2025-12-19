@@ -78,6 +78,7 @@ export default function LoginView() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
+                  tabIndex={-1}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -90,6 +91,7 @@ export default function LoginView() {
 
             <div className="flex text-sm">
               <button
+                type="button"
                 onClick={() => navigate('/forgot-password')}
                 className="ml-auto text-blue-400 hover:text-blue-300 transition-colors"
               >
