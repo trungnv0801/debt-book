@@ -50,7 +50,7 @@ export default function ResetPasswordForm(props: Props) {
             {t('auth.resetPassword.form.title')}
           </h2>
 
-          <div className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="text-slate-400 text-sm block mb-2">
                 {t('auth.resetPassword.form.newPassword')}
@@ -92,7 +92,7 @@ export default function ResetPasswordForm(props: Props) {
               )}
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <div>
               <label className="text-slate-400 text-sm block mb-2">
                 {t('auth.resetPassword.form.confirmPassword')}
               </label>
@@ -135,7 +135,7 @@ export default function ResetPasswordForm(props: Props) {
                   {errors.confirmPassword}
                 </div>
               )}
-            </form>
+            </div>
 
             <button
               type="submit"
@@ -152,7 +152,7 @@ export default function ResetPasswordForm(props: Props) {
                 ? t('auth.resetPassword.form.processing')
                 : t('auth.resetPassword.form.submit')}
             </button>
-          </div>
+          </form>
         </>
       ) : (
         <div className="text-center">
