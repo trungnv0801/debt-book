@@ -1,29 +1,30 @@
-import { AuthContext } from '@/contexts'
-import { checkUserExists } from '@/services/auth'
-import { UID } from '@/utils'
 import { useEffect, useState } from 'react'
+import { AuthContext } from '@/contexts'
+import { listenAuthState, checkUserExists } from "@/services/auth"
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [uid, setUid] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const verify = async () => {
-      const stored = localStorage.getItem(UID)
-
-      if (!stored) {
+    const unsubscribe = listenAuthState(async (user) => {
+      if (!user) {
         setUid(null)
         setLoading(false)
         return
       }
 
-      const ok = await checkUserExists(stored)
+      try {
+        const ok = await checkUserExists(user.uid)
+        setUid(ok ? user.uid : null)
+      } catch (err) {
+        setUid(null)
+      } finally {
+        setLoading(false)
+      }
+    })
 
-      setUid(ok ? stored : null)
-      setLoading(false)
-    }
-
-    verify()
+    return () => unsubscribe()
   }, [])
 
   return (

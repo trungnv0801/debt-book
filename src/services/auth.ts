@@ -5,6 +5,8 @@ import {
   verifyPasswordResetCode,
   confirmPasswordReset,
   validatePassword,
+  onAuthStateChanged,
+  User,
 } from 'firebase/auth'
 import { auth, db } from '@/firebase/config'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
@@ -64,4 +66,15 @@ export const confirmResetPassword = async (
 export const getPasswordRules = async () => {
   const validation = await validatePassword(auth, '')
   return validation.passwordPolicy
+}
+
+export const listenAuthState = (
+  callback: (user: User | null) => void
+) => {
+  return onAuthStateChanged(auth, callback)
+}
+
+export const refreshToken = async () => {
+  if (!auth.currentUser) return null
+  return auth.currentUser.getIdToken(true)
 }
