@@ -1,11 +1,16 @@
-import { Debt } from '@/types/debt'
-import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
-import { INITIAL_DEBT } from '../shared'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react'
+import Modal from '@/components/common/Modal'
+import { usePersons } from '@/hooks/person'
+import PersonList from '@/pages/person/PersonList'
+import PersonSelect from '@/pages/person/components/PersonSelect'
+import { Debt } from '@/types/debt'
+import { formatAmount, INITIAL_DEBT } from '../shared'
 
 interface DebtFormProps {
   newDebt: Debt
+  personsHook: ReturnType<typeof usePersons>
   ref: React.Ref<HTMLDivElement>
   setNewDebt: React.Dispatch<React.SetStateAction<Debt>>
   handleSubmit: () => void
@@ -14,13 +19,15 @@ interface DebtFormProps {
 
 const DebtForm: React.FC<DebtFormProps> = ({
   newDebt,
+  personsHook,
   ref,
   setNewDebt,
   handleSubmit,
   setShowAddForm,
 }) => {
   const { t } = useTranslation()
-  const [displayAmount, setDisplayAmount] = useState('')
+  const { persons } = personsHook
+  const [showPersonManager, setShowPersonManager] = useState(false)
 
   return (
     <>
@@ -61,29 +68,36 @@ const DebtForm: React.FC<DebtFormProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
+          <PersonSelect
+            persons={persons}
+            value={newDebt.personId}
+            onChange={(id) => setNewDebt({ ...newDebt, personId: id })}
+            onAdd={() => setShowPersonManager(true)}
             placeholder={t('debt.form.personName')}
-            value={newDebt.personName}
-            onChange={(e) =>
-              setNewDebt({ ...newDebt, personName: e.target.value })
-            }
-            className="bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
+          <Modal
+            open={showPersonManager}
+            onClose={() => setShowPersonManager(false)}
+            title={t('person.managePersons')}
+          >
+            <PersonList personsHook={personsHook} />
+          </Modal>
+
           <input
             type="text"
             inputMode="numeric"
             placeholder={t('debt.form.amount')}
-            value={displayAmount}
+            value={formatAmount(newDebt.amount)}
             onChange={(e) => {
               const value = e.target.value
               const cleaned = value
                 .replace(/^0+(?=\d)/, '')
                 .replace(/[^0-9]/g, '')
-              setNewDebt({ ...newDebt, amount: +cleaned })
-              setDisplayAmount(
-                cleaned ? cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '',
-              )
+              setNewDebt({
+                ...newDebt,
+                amount: cleaned ? Number(cleaned) : 0,
+              })
             }}
             className="bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

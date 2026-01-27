@@ -28,8 +28,11 @@ const debt = {
     noLendTransactions: 'Chưa có giao dịch cho mượn',
     noBorrowTransactions: 'Chưa có giao dịch đi mượn',
   },
-  summaryByPerson: 'Tổng theo từng người',
-  searchPerson: 'Tìm theo tên...',
+  search: {
+    title: 'Tìm kiếm',
+    name: 'Tên',
+    note: 'Ghi chú',
+  },
   noMatchingPerson: 'Không tìm thấy người phù hợp',
 }
 

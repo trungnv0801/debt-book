@@ -5,3 +5,5 @@ export const PASSWORD_REGEX = {
   UPPERCASE: /(?=.*[A-Z])/,
   NUMBER: /(?=.*\d)/,
 }
+
+export const THOUSAND_SEPARATOR_REGEX = /\B(?=(\d{3})+(?!\d))/g

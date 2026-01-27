@@ -1,18 +1,18 @@
 import type React from 'react'
-import { Debt } from '@/types/debt'
+import { Debt, PersonDebtGroup } from '@/types/debt'
 import { useTranslation } from 'react-i18next'
 import { DebtSection } from './DebtSection'
 
 interface DebtListProps {
-  lentDebts: Debt[]
-  borrowedDebts: Debt[]
+  lentGroups: PersonDebtGroup[]
+  borrowedGroups: PersonDebtGroup[]
   handleDeleteDebt: (id: string) => void
   handleEditDebt: (debt: Debt) => void
 }
 
 const DebtList: React.FC<DebtListProps> = ({
-  lentDebts,
-  borrowedDebts,
+  lentGroups,
+  borrowedGroups,
   handleDeleteDebt,
   handleEditDebt,
 }) => {
@@ -23,7 +23,7 @@ const DebtList: React.FC<DebtListProps> = ({
       <DebtSection
         type="lent"
         title={t('debt.owedToMe')}
-        debts={lentDebts}
+        groups={lentGroups}
         emptyText={t('debt.list.noLendTransactions')}
         onDelete={handleDeleteDebt}
         onEdit={handleEditDebt}
@@ -32,7 +32,7 @@ const DebtList: React.FC<DebtListProps> = ({
       <DebtSection
         type="borrowed"
         title={t('debt.iOwe')}
-        debts={borrowedDebts}
+        groups={borrowedGroups}
         emptyText={t('debt.list.noBorrowTransactions')}
         onDelete={handleDeleteDebt}
         onEdit={handleEditDebt}

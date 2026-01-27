@@ -1,18 +1,18 @@
 import { ArrowDownCircle, ArrowUpCircle, DollarSign } from 'lucide-react'
-import { Debt } from '@/types/debt'
+import { PersonDebtGroup } from '@/types/debt'
 import { useTranslation } from 'react-i18next'
-import { formatCurrency, summarizeByPerson } from '../shared'
+import { formatCurrency } from '../shared'
 
 interface SummaryProps {
-  lentDebts: Debt[]
-  borrowedDebts: Debt[]
+  lentDebts: PersonDebtGroup[]
+  borrowedDebts: PersonDebtGroup[]
 }
 
 const Summary: React.FC<SummaryProps> = ({ lentDebts, borrowedDebts }) => {
   const { t } = useTranslation()
-  const totalLent = lentDebts.reduce((sum, debt) => sum + debt.amount, 0)
+  const totalLent = lentDebts.reduce((sum, debt) => sum + debt.totalAmount, 0)
   const totalBorrowed = borrowedDebts.reduce(
-    (sum, debt) => sum + debt.amount,
+    (sum, debt) => sum + debt.totalAmount,
     0,
   )
   const netBalance = totalLent - totalBorrowed
@@ -30,7 +30,7 @@ const Summary: React.FC<SummaryProps> = ({ lentDebts, borrowedDebts }) => {
           </div>
           <div className="text-sm text-green-100">
             {t('debt.people', {
-              count: Object.keys(summarizeByPerson(lentDebts)).length,
+              count: lentDebts.length,
             })}
           </div>
         </div>
@@ -47,7 +47,7 @@ const Summary: React.FC<SummaryProps> = ({ lentDebts, borrowedDebts }) => {
           </div>
           <div className="text-sm text-red-100">
             {t('debt.people', {
-              count: Object.keys(summarizeByPerson(borrowedDebts)).length,
+              count: borrowedDebts.length,
             })}
           </div>
         </div>

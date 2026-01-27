@@ -1,39 +1,94 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PlusCircle } from 'lucide-react'
 import { useDebts } from '@/hooks/debt'
-import { Debt } from '@/types'
+import { Debt, DebtSearch } from '@/types'
 import Loading from '@/components/common/Loading'
 import DebtForm from './components/DebtForm'
 import DebtList from './components/DebtList'
 import Summary from './components/Summary'
-import { INITIAL_DEBT } from './shared'
-import { TYPE_BORROWED, TYPE_LENT } from './shared/constant'
-import { PersonSummary } from './components/PersonSummary'
+import { groupDebtsByPerson, INITIAL_DEBT } from './shared'
+import {
+  INITIAL_DEBT_SEARCH,
+  TYPE_BORROWED,
+  TYPE_LENT,
+} from './shared/constant'
+import { usePersons } from '@/hooks/person'
+import SearchForm from './components/SearchForm'
 
 export default function DebtView() {
   const { t } = useTranslation()
   const formRef = useRef<HTMLDivElement>(null)
   const { debts, loading, addDebt, getDebts, deleteDebt, editDebt } = useDebts()
   const [showForm, setShowForm] = useState(false)
-
   const [newDebt, setNewDebt] = useState<Debt>(INITIAL_DEBT)
+  const personsHook = usePersons()
+  const { persons, getPersons } = personsHook
+  const [search, setSearch] = useState<DebtSearch>(INITIAL_DEBT_SEARCH)
 
-  const lentDebts = debts.filter((d) => d.type === TYPE_LENT)
-  const borrowedDebts = debts.filter((d) => d.type === TYPE_BORROWED)
+  const personMap = useMemo(
+    () => Object.fromEntries(persons.map((p) => [p.id, p.name])),
+    [persons],
+  )
+
+  const filteredDebts = useMemo(() => {
+    return debts.filter((debt) => {
+      if (search.name) {
+        const personName = personMap[debt.personId]?.toLowerCase() ?? ''
+
+        if (!personName.includes(search.name.toLowerCase())) {
+          return false
+        }
+      }
+
+      if (search.note) {
+        if (!debt.note?.toLowerCase().includes(search.note.toLowerCase())) {
+          return false
+        }
+      }
+
+      if (search.date && debt.date < search.date) {
+        return false
+      }
+
+      if (search.dueDate && debt.date > search.dueDate) {
+        return false
+      }
+
+      return true
+    })
+  }, [debts, search, personMap])
+
+  const lentGroups = useMemo(
+    () =>
+      groupDebtsByPerson(
+        filteredDebts.filter((d) => d.type === TYPE_LENT),
+        personMap,
+      ),
+    [filteredDebts, personMap],
+  )
+
+  const borrowedGroups = useMemo(
+    () =>
+      groupDebtsByPerson(
+        filteredDebts.filter((d) => d.type === TYPE_BORROWED),
+        personMap,
+      ),
+    [filteredDebts, personMap],
+  )
 
   const handleSubmit = async () => {
-    const { id, personName, amount, date, type, dueDate, note } = newDebt
+    const { id, personId, amount, date, type, dueDate, note } = newDebt
 
-    if (!personName || !amount || !date) return
+    if (!personId || !amount || !date) return
 
     const payload = {
       type,
-      personName: personName.trim(),
+      personId: personId.trim(),
       amount,
       date,
       dueDate,
-      note,
+      note: note.trim(),
     }
 
     const action = id ? editDebt(id, payload) : addDebt(payload)
@@ -55,6 +110,10 @@ export default function DebtView() {
   }, [getDebts])
 
   useEffect(() => {
+    getPersons()
+  }, [getPersons])
+
+  useEffect(() => {
     if (formRef.current) {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
@@ -71,9 +130,9 @@ export default function DebtView() {
           <p className="text-slate-400">{t('debt.subtitle')}</p>
         </div>
 
-        <Summary lentDebts={lentDebts} borrowedDebts={borrowedDebts} />
+        <Summary lentDebts={lentGroups} borrowedDebts={borrowedGroups} />
 
-        <PersonSummary lentDebts={lentDebts} borrowedDebts={borrowedDebts} />
+        <SearchForm value={search} onChange={setSearch} />
 
         <div className="mb-6 flex gap-3">
           <button
@@ -92,14 +151,15 @@ export default function DebtView() {
             setShowAddForm={setShowForm}
             newDebt={newDebt}
             setNewDebt={setNewDebt}
+            personsHook={personsHook}
           />
         )}
 
         <DebtList
+          lentGroups={lentGroups}
+          borrowedGroups={borrowedGroups}
           handleDeleteDebt={handleDeleteDebt}
           handleEditDebt={handleEditDebt}
-          lentDebts={lentDebts}
-          borrowedDebts={borrowedDebts}
         />
       </div>
     </div>

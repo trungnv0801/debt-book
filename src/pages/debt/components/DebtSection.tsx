@@ -1,12 +1,12 @@
 import { ArrowUpCircle, ArrowDownCircle } from 'lucide-react'
-import { DebtCard } from './DebtCard'
-import { Debt } from '@/types'
+import { Debt, PersonDebtGroup } from '@/types'
+import PersonDebtGroupItem from './PersonDebtGroupItem'
 import { DebtType, TYPE_LENT } from '../shared'
 
 interface DebtSectionProps {
   title: string
   type: DebtType
-  debts: Debt[]
+  groups: PersonDebtGroup[]
   emptyText: string
   onDelete: (id: string) => void
   onEdit: (debt: Debt) => void
@@ -15,7 +15,7 @@ interface DebtSectionProps {
 export const DebtSection: React.FC<DebtSectionProps> = ({
   title,
   type,
-  debts,
+  groups = [],
   emptyText,
   onDelete,
   onEdit,
@@ -35,17 +35,17 @@ export const DebtSection: React.FC<DebtSectionProps> = ({
       </h2>
 
       <div className="space-y-3">
-        {debts.map((debt) => (
-          <DebtCard
-            key={debt.id}
-            debt={debt}
+        {groups.map((group) => (
+          <PersonDebtGroupItem
+            key={group.personId}
+            group={group}
             color={type === TYPE_LENT ? 'green' : 'red'}
             onDelete={onDelete}
             onEdit={onEdit}
           />
         ))}
 
-        {debts.length === 0 && (
+        {groups.length === 0 && (
           <div className="text-center py-8 bg-slate-800 rounded-xl border border-slate-700">
             <p className="text-slate-400">{emptyText}</p>
           </div>

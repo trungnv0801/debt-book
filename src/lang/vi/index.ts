@@ -1,13 +1,15 @@
 import base from './base'
 import auth from './auth'
 import debt from './debt'
+import person from './person'
 import validation from './validation'
 
-const vi = {
+const en = {
   ...base,
   auth,
   debt,
+  person,
   validation,
 }
 
-export default vi
+export default en

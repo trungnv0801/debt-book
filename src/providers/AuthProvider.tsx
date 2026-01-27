@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AuthContext } from '@/contexts'
-import { listenAuthState, checkUserExists } from "@/services/auth"
+import { listenAuthState, checkUserExists } from '@/services/auth'
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [uid, setUid] = useState<string | null>(null)

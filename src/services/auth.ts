@@ -68,9 +68,7 @@ export const getPasswordRules = async () => {
   return validation.passwordPolicy
 }
 
-export const listenAuthState = (
-  callback: (user: User | null) => void
-) => {
+export const listenAuthState = (callback: (user: User | null) => void) => {
   return onAuthStateChanged(auth, callback)
 }
 
