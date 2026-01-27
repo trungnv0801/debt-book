@@ -28,8 +28,11 @@ const debt = {
     noLendTransactions: 'No lending transactions yet',
     noBorrowTransactions: 'No borrowing transactions yet',
   },
-  summaryByPerson: 'Summary by Person',
-  searchPerson: 'Search Person',
+  search: {
+    title: 'Search',
+    name: 'Name',
+    note: 'Note',
+  },
   noMatchingPerson: 'No matching person found',
 }
 

@@ -1,3 +1,4 @@
 export * from './user'
 export * from './auth'
 export * from './debt'
+export * from './person'
