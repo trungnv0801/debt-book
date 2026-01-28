@@ -30,7 +30,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ value, onChange }) => {
           {t('clear')}
         </button>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
           type="text"
           placeholder={t('debt.search.name')}
@@ -48,12 +48,12 @@ const SearchForm: React.FC<SearchFormProps> = ({ value, onChange }) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
           type="date"
           value={value.date}
           onChange={(e) => onChange({ ...value, date: e.target.value })}
-          className="p-3 rounded-lg bg-slate-700 text-white"
+          className="block w-full p-3 rounded-lg bg-slate-700 text-white"
         />
 
         <input
@@ -61,7 +61,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ value, onChange }) => {
           min={value.dueDate}
           value={value.dueDate}
           onChange={(e) => onChange({ ...value, dueDate: e.target.value })}
-          className="p-3 rounded-lg bg-slate-700 text-white"
+          className="block w-full p-3 rounded-lg bg-slate-700 text-white"
         />
       </div>
     </div>
