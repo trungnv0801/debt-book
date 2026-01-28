@@ -1,11 +1,13 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useContext } from 'react'
 import { useAuth } from '@/hooks/auth'
+import { AuthContext } from '@/contexts'
 
 const AvatarDropdown = () => {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const avatarRef = useRef<HTMLButtonElement>(null)
   const { logout, loading } = useAuth()
+  const { email } = useContext(AuthContext)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -36,11 +38,9 @@ const AvatarDropdown = () => {
           aria-label="User menu"
           aria-haspopup="true"
         >
-          <img
-            className="h-10 w-10 rounded-full"
-            src="https://tailwindcss.com/plus-assets/img/testimonials/ben-barbersmith.jpg"
-            alt="User Avatar"
-          />
+          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-sky-600 text-white font-semibold">
+            {email?.charAt(0).toLocaleUpperCase()}
+          </div>
         </button>
 
         {isOpen && (
@@ -51,18 +51,6 @@ const AvatarDropdown = () => {
             aria-orientation="vertical"
             aria-labelledby="user-menu"
           >
-            <button
-              className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
-              role="menuitem"
-            >
-              Your Profile
-            </button>
-            <button
-              className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
-              role="menuitem"
-            >
-              Settings
-            </button>
             <button
               onClick={logout}
               disabled={loading}

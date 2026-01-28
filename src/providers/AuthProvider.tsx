@@ -5,6 +5,7 @@ import { listenAuthState, checkUserExists } from '@/services/auth'
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [uid, setUid] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [email, setEmail] = useState<string | null>(null)
 
   useEffect(() => {
     const unsubscribe = listenAuthState(async (user) => {
@@ -16,7 +17,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       try {
         const ok = await checkUserExists(user.uid)
-        setUid(ok ? user.uid : null)
+        if (ok) {
+          setEmail(user.email)
+          setUid(user.uid)
+        }
       } catch (err) {
         setUid(null)
       } finally {
@@ -31,6 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         uid,
+        email,
         loading,
         loggedIn: !!uid,
         setUid,
