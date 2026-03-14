@@ -13,6 +13,11 @@ export interface PersonDebtGroup {
   personName: string
   totalAmount: number
   debts: Debt[]
+  netAmount: number
+  offsetAmount: number
+  isOffset: boolean
+  lentAmount: number
+  borrowedAmount: number
 }
 
 export interface DebtSearch {

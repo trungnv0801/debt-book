@@ -34,6 +34,11 @@ const debt = {
     note: 'Ghi chú',
   },
   noMatchingPerson: 'Không tìm thấy người phù hợp',
+  offsetApplied: 'Bù trừ {{amount}}',
+  offsetBreakdownLent: 'Cho vay {{lent}} − Đã vay lại {{borrowed}}',
+  offsetBreakdownBorrowed: 'Vay {{borrowed}} − Đã trả lại {{lent}}',
+  offsetDetail:
+    'Bù trừ {{offsetAmount}} (cho vay {{lent}}, vay lại {{borrowed}}) → còn lại {{net}}',
 }
 
 export default debt

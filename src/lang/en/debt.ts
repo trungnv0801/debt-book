@@ -34,6 +34,11 @@ const debt = {
     note: 'Note',
   },
   noMatchingPerson: 'No matching person found',
+  offsetApplied: 'Offset {{amount}}',
+  offsetBreakdownLent: 'Lent {{lent}} − Borrowed back {{borrowed}}',
+  offsetBreakdownBorrowed: 'Borrowed {{borrowed}} − Repaid {{lent}}',
+  offsetDetail:
+    'Offset {{offsetAmount}} (lent {{lent}}, borrowed back {{borrowed}}) → remaining {{net}}',
 }
 
 export default debt

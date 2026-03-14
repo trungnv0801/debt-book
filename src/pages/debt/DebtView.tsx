@@ -7,12 +7,11 @@ import Loading from '@/components/common/Loading'
 import DebtForm from './components/DebtForm'
 import DebtList from './components/DebtList'
 import Summary from './components/Summary'
-import { groupDebtsByPerson, INITIAL_DEBT } from './shared'
 import {
+  groupDebtsByPersonWithOffset,
+  INITIAL_DEBT,
   INITIAL_DEBT_SEARCH,
-  TYPE_BORROWED,
-  TYPE_LENT,
-} from './shared/constant'
+} from './shared'
 import { usePersons } from '@/hooks/person'
 import SearchForm from './components/SearchForm'
 
@@ -35,45 +34,20 @@ export default function DebtView() {
     return debts.filter((debt) => {
       if (search.name) {
         const personName = personMap[debt.personId]?.toLowerCase() ?? ''
-
-        if (!personName.includes(search.name.toLowerCase())) {
-          return false
-        }
+        if (!personName.includes(search.name.toLowerCase())) return false
       }
-
       if (search.note) {
-        if (!debt.note?.toLowerCase().includes(search.note.toLowerCase())) {
+        if (!debt.note?.toLowerCase().includes(search.note.toLowerCase()))
           return false
-        }
       }
-
-      if (search.date && debt.date < search.date) {
-        return false
-      }
-
-      if (search.dueDate && debt.date > search.dueDate) {
-        return false
-      }
-
+      if (search.date && debt.date < search.date) return false
+      if (search.dueDate && debt.date > search.dueDate) return false
       return true
     })
   }, [debts, search, personMap])
 
-  const lentGroups = useMemo(
-    () =>
-      groupDebtsByPerson(
-        filteredDebts.filter((d) => d.type === TYPE_LENT),
-        personMap,
-      ),
-    [filteredDebts, personMap],
-  )
-
-  const borrowedGroups = useMemo(
-    () =>
-      groupDebtsByPerson(
-        filteredDebts.filter((d) => d.type === TYPE_BORROWED),
-        personMap,
-      ),
+  const { lentGroups, borrowedGroups } = useMemo(
+    () => groupDebtsByPersonWithOffset(filteredDebts, personMap),
     [filteredDebts, personMap],
   )
 

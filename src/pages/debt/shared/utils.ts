@@ -37,27 +37,83 @@ export const summarizeByPerson = (debts: Debt[]) => {
   return summary
 }
 
-export const groupDebtsByPerson = (
-  debts: Debt[],
+export function groupDebtsByPersonWithOffset(
+  allDebts: Debt[],
   personMap: Record<string, string>,
-): PersonDebtGroup[] => {
-  const map: Record<string, PersonDebtGroup> = {}
+): {
+  lentGroups: PersonDebtGroup[]
+  borrowedGroups: PersonDebtGroup[]
+} {
+  const personData: Record<
+    string,
+    {
+      lentDebts: Debt[]
+      borrowedDebts: Debt[]
+      lentAmount: number
+      borrowedAmount: number
+    }
+  > = {}
 
-  debts.forEach((d) => {
-    if (!map[d.personId]) {
-      map[d.personId] = {
-        personId: d.personId,
-        personName: personMap[d.personId],
-        totalAmount: 0,
-        debts: [],
+  for (const debt of allDebts) {
+    if (!personData[debt.personId]) {
+      personData[debt.personId] = {
+        lentDebts: [],
+        borrowedDebts: [],
+        lentAmount: 0,
+        borrowedAmount: 0,
       }
     }
+    if (debt.type === TYPE_LENT) {
+      personData[debt.personId].lentDebts.push(debt)
+      personData[debt.personId].lentAmount += debt.amount
+    } else {
+      personData[debt.personId].borrowedDebts.push(debt)
+      personData[debt.personId].borrowedAmount += debt.amount
+    }
+  }
 
-    map[d.personId].totalAmount += d.amount
-    map[d.personId].debts.push(d)
-  })
+  const lentGroups: PersonDebtGroup[] = []
+  const borrowedGroups: PersonDebtGroup[] = []
 
-  return Object.values(map)
+  for (const [personId, data] of Object.entries(personData)) {
+    const { lentAmount, borrowedAmount, lentDebts, borrowedDebts } = data
+    const offsetAmount = Math.min(lentAmount, borrowedAmount)
+    const isOffset = offsetAmount > 0
+    const personName = personMap[personId] ?? personId
+
+    if (lentDebts.length > 0) {
+      lentGroups.push({
+        personId,
+        personName,
+        totalAmount: lentAmount,
+        debts: lentDebts,
+        netAmount: Math.max(0, lentAmount - borrowedAmount),
+        offsetAmount,
+        isOffset,
+        lentAmount,
+        borrowedAmount,
+      })
+    }
+
+    if (borrowedDebts.length > 0) {
+      borrowedGroups.push({
+        personId,
+        personName,
+        totalAmount: borrowedAmount,
+        debts: borrowedDebts,
+        netAmount: Math.max(0, borrowedAmount - lentAmount),
+        offsetAmount,
+        isOffset,
+        lentAmount,
+        borrowedAmount,
+      })
+    }
+  }
+
+  lentGroups.sort((a, b) => b.totalAmount - a.totalAmount)
+  borrowedGroups.sort((a, b) => b.totalAmount - a.totalAmount)
+
+  return { lentGroups, borrowedGroups }
 }
 
 export const formatAmount = (value?: number) =>
