@@ -7,4 +7,5 @@ export default {
   save: 'Save',
   cancel: 'Cancel',
   clear: 'Clear',
+  noResult: 'No results',
 }

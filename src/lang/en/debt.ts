@@ -30,7 +30,10 @@ const debt = {
   },
   search: {
     title: 'Search',
-    name: 'Name',
+    person: {
+      input: 'Person name',
+      select: 'Select person name ...',
+    },
     note: 'Note',
   },
   noMatchingPerson: 'No matching person found',

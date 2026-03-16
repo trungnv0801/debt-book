@@ -7,4 +7,5 @@ export default {
   save: 'Lưu',
   cancel: 'Hủy',
   clear: 'Đặt lại',
+  noResult: 'Không có kết quả phù hợp',
 }
