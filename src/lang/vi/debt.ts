@@ -30,7 +30,10 @@ const debt = {
   },
   search: {
     title: 'Tìm kiếm',
-    name: 'Tên',
+    person: {
+      input: 'Tên người',
+      select: 'Tìm kiếm tên người ...',
+    },
     note: 'Ghi chú',
   },
   noMatchingPerson: 'Không tìm thấy người phù hợp',

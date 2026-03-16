@@ -1,21 +1,35 @@
 import { useTranslation } from 'react-i18next'
 import { DebtSearch } from '@/types'
+import { usePersons } from '@/hooks/person'
+import { SearchSelect } from '@/components/common'
 
 interface SearchFormProps {
   value: DebtSearch
+  personsHook: ReturnType<typeof usePersons>
   onChange: (value: DebtSearch) => void
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ value, onChange }) => {
+const SearchForm: React.FC<SearchFormProps> = ({
+  value,
+  personsHook,
+  onChange,
+}) => {
   const { t } = useTranslation()
+  const { persons } = personsHook
+  const options = persons.map((p) => ({
+    id: p.id,
+    label: p.name,
+  }))
+
   const handleClear = () => {
     onChange({
-      name: '',
+      personId: '',
       note: '',
       date: '',
       dueDate: '',
     })
   }
+
   return (
     <div className="mb-6 bg-slate-800 p-5 rounded-xl border border-slate-700 space-y-4">
       <div className="flex items-center justify-between mb-4">
@@ -31,12 +45,12 @@ const SearchForm: React.FC<SearchFormProps> = ({ value, onChange }) => {
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input
-          type="text"
-          placeholder={t('debt.search.name')}
-          value={value.name}
-          onChange={(e) => onChange({ ...value, name: e.target.value })}
-          className="p-3 rounded-lg bg-slate-700 text-white"
+        <SearchSelect
+          options={options}
+          value={value.personId}
+          onChange={(peronId) => onChange({ ...value, personId: peronId })}
+          placeholder={t('debt.search.person.input')}
+          searchPlaceholder={t('debt.search.person.select')}
         />
 
         <input

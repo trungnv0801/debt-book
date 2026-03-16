@@ -32,19 +32,19 @@ export default function DebtView() {
 
   const filteredDebts = useMemo(() => {
     return debts.filter((debt) => {
-      if (search.name) {
-        const personName = personMap[debt.personId]?.toLowerCase() ?? ''
-        if (!personName.includes(search.name.toLowerCase())) return false
-      }
-      if (search.note) {
-        if (!debt.note?.toLowerCase().includes(search.note.toLowerCase()))
-          return false
-      }
+      if (search.personId && debt.personId !== search.personId) return false
+
+      if (
+        search.note &&
+        !debt.note?.toLowerCase().includes(search.note.toLowerCase())
+      )
+        return false
+
       if (search.date && debt.date < search.date) return false
       if (search.dueDate && debt.date > search.dueDate) return false
       return true
     })
-  }, [debts, search, personMap])
+  }, [debts, search])
 
   const { lentGroups, borrowedGroups } = useMemo(
     () => groupDebtsByPersonWithOffset(filteredDebts, personMap),
@@ -106,7 +106,11 @@ export default function DebtView() {
 
         <Summary lentDebts={lentGroups} borrowedDebts={borrowedGroups} />
 
-        <SearchForm value={search} onChange={setSearch} />
+        <SearchForm
+          value={search}
+          onChange={setSearch}
+          personsHook={personsHook}
+        />
 
         <div className="mb-6 flex gap-3">
           <button

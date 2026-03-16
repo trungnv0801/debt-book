@@ -21,7 +21,7 @@ export interface PersonDebtGroup {
 }
 
 export interface DebtSearch {
-  name: string
+  personId: string
   date: string
   dueDate: string
   note: string
