@@ -12,7 +12,7 @@ export const TYPE_BORROWED = 'borrowed'
 export type DebtType = (typeof DEBT_TYPES)[keyof typeof DEBT_TYPES]
 
 export const INITIAL_DEBT_SEARCH: DebtSearch = {
-  name: '',
+  personId: '',
   date: '',
   dueDate: '',
   note: '',
