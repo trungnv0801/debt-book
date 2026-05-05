@@ -1,14 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
-import {
-  collection,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  QueryDocumentSnapshot,
-} from 'firebase/firestore'
-import { db } from '@/firebase/config'
+import { useState, useCallback } from 'react'
+import { addDebt, getDebts, editDebt, deleteDebt } from '@/services/debt'
 import { Debt } from '@/types/debt'
 import { useAuthContext } from './auth'
 
@@ -18,21 +9,15 @@ export const useDebts = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
-  const getDebts = useCallback(async () => {
+  const fetchDebts = useCallback(async () => {
     if (!uid) return
 
     setLoading(true)
     setError(null)
 
     try {
-      const ref = collection(db, 'users', uid, 'debts')
-      const snap = await getDocs(ref)
-
-      const list: Debt[] = snap.docs.map((doc: QueryDocumentSnapshot) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Debt[]
-      setDebts(list)
+      const list = await getDebts(uid)
+      setDebts(list as Debt[])
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -40,11 +25,7 @@ export const useDebts = () => {
     }
   }, [uid])
 
-  useEffect(() => {
-    getDebts()
-  }, [getDebts])
-
-  const addDebt = useCallback(
+  const handleAddDebt = useCallback(
     async (debt: Omit<Debt, 'id'>) => {
       if (!uid) return
 
@@ -52,20 +33,17 @@ export const useDebts = () => {
       setError(null)
 
       try {
-        const ref = collection(db, 'users', uid, 'debts')
-        const docRef = await addDoc(ref, {
-          ...debt,
-          createdAt: new Date().toISOString(),
-        })
+        const res = await addDebt(uid, debt)
 
         setDebts((prev) => [
           ...prev,
           {
-            id: docRef.id,
+            id: res.id,
             ...debt,
           } as Debt,
         ])
-        return docRef.id
+
+        return res.id
       } catch (err: any) {
         setError(err.message)
         return null
@@ -76,7 +54,7 @@ export const useDebts = () => {
     [uid],
   )
 
-  const editDebt = useCallback(
+  const handleEditDebt = useCallback(
     async (debtId: string, updated: Partial<Omit<Debt, 'id'>>) => {
       if (!uid) return
 
@@ -84,12 +62,7 @@ export const useDebts = () => {
       setError(null)
 
       try {
-        const ref = doc(db, 'users', uid, 'debts', debtId)
-
-        await updateDoc(ref, {
-          ...updated,
-          updatedAt: new Date().toISOString(),
-        })
+        await editDebt(uid, debtId, updated)
 
         setDebts((prev) =>
           prev.map((d) =>
@@ -108,7 +81,7 @@ export const useDebts = () => {
     [uid],
   )
 
-  const deleteDebt = useCallback(
+  const handleDeleteDebt = useCallback(
     async (debtId: string) => {
       if (!uid) return
 
@@ -116,8 +89,7 @@ export const useDebts = () => {
       setError(null)
 
       try {
-        const ref = doc(db, 'users', uid, 'debts', debtId)
-        await deleteDoc(ref)
+        await deleteDebt(uid, debtId)
 
         setDebts((prev) => prev.filter((d) => d.id !== debtId))
 
@@ -132,13 +104,127 @@ export const useDebts = () => {
     [uid],
   )
 
+  // const getDebts = useCallback(async () => {
+  //   if (!uid) return
+
+  //   setLoading(true)
+  //   setError(null)
+
+  //   try {
+  //     const ref = collection(db, 'users', uid, 'debts')
+  //     const snap = await getDocs(ref)
+
+  //     const list: Debt[] = snap.docs.map((doc: QueryDocumentSnapshot) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     })) as Debt[]
+  //     setDebts(list)
+  //   } catch (err: any) {
+  //     setError(err.message)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }, [uid])
+
+  // useEffect(() => {
+  //   getDebts()
+  // }, [getDebts])
+
+  // const addDebt = useCallback(
+  //   async (debt: Omit<Debt, 'id'>) => {
+  //     if (!uid) return
+
+  //     setLoading(true)
+  //     setError(null)
+
+  //     try {
+  //       const ref = collection(db, 'users', uid, 'debts')
+  //       const docRef = await addDoc(ref, {
+  //         ...debt,
+  //         createdAt: new Date().toISOString(),
+  //       })
+
+  //       setDebts((prev) => [
+  //         ...prev,
+  //         {
+  //           id: docRef.id,
+  //           ...debt,
+  //         } as Debt,
+  //       ])
+  //       return docRef.id
+  //     } catch (err: any) {
+  //       setError(err.message)
+  //       return null
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   },
+  //   [uid],
+  // )
+
+  // const editDebt = useCallback(
+  //   async (debtId: string, updated: Partial<Omit<Debt, 'id'>>) => {
+  //     if (!uid) return
+
+  //     setLoading(true)
+  //     setError(null)
+
+  //     try {
+  //       const ref = doc(db, 'users', uid, 'debts', debtId)
+
+  //       await updateDoc(ref, {
+  //         ...updated,
+  //         updatedAt: new Date().toISOString(),
+  //       })
+
+  //       setDebts((prev) =>
+  //         prev.map((d) =>
+  //           d.id === debtId ? ({ ...d, ...updated } as Debt) : d,
+  //         ),
+  //       )
+
+  //       return true
+  //     } catch (err: any) {
+  //       setError(err.message)
+  //       return false
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   },
+  //   [uid],
+  // )
+
+  // const deleteDebt = useCallback(
+  //   async (debtId: string) => {
+  //     if (!uid) return
+
+  //     setLoading(true)
+  //     setError(null)
+
+  //     try {
+  //       const ref = doc(db, 'users', uid, 'debts', debtId)
+  //       await deleteDoc(ref)
+
+  //       setDebts((prev) => prev.filter((d) => d.id !== debtId))
+
+  //       return true
+  //     } catch (err: any) {
+  //       setError(err.message)
+  //       return false
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   },
+  //   [uid],
+  // )
+
   return {
     debts,
     loading,
     error,
-    getDebts,
-    addDebt,
-    editDebt,
-    deleteDebt,
+    getDebts: fetchDebts,
+    addDebt: handleAddDebt,
+    editDebt: handleEditDebt,
+    deleteDebt: handleDeleteDebt,
   }
 }

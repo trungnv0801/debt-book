@@ -20,14 +20,14 @@ export const addDebt = async (uid: string, debt: Omit<Debt, 'id'>) => {
   return { id: docRef.id }
 }
 
-export const getDebts = async (uid: string) => {
+export const getDebts = async (uid: string): Promise<Debt[]> => {
   const ref = collection(db, 'users', uid, 'debts')
   const snap = await getDocs(ref)
 
   return snap.docs.map((d) => ({
     id: d.id,
     ...d.data(),
-  }))
+  })) as Debt[]
 }
 
 export const editDebt = async (
