@@ -27,6 +27,8 @@ const debt = {
     overdue: 'Overdue by {{days}} days',
     noLendTransactions: 'No lending transactions yet',
     noBorrowTransactions: 'No borrowing transactions yet',
+    amount: 'Amount',
+    deleteConfirmMessage: 'Are you sure you want to delete it?',
   },
   search: {
     title: 'Search',

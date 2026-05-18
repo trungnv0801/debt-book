@@ -5,6 +5,7 @@ export default {
   },
   add: 'Add',
   save: 'Save',
+  delete: 'Delete',
   cancel: 'Cancel',
   clear: 'Clear',
   noResult: 'No results',
