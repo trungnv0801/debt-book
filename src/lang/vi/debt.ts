@@ -27,6 +27,8 @@ const debt = {
     overdue: 'Quá hạn {{days}} ngày',
     noLendTransactions: 'Chưa có giao dịch cho mượn',
     noBorrowTransactions: 'Chưa có giao dịch đi mượn',
+    amount: 'Số tiền',
+    deleteConfirmMessage: 'Bạn có chắc chắn muốn xóa nó?',
   },
   search: {
     title: 'Tìm kiếm',

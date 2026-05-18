@@ -4,7 +4,8 @@ import {
   getDocs,
   updateDoc,
   doc,
-  deleteDoc,
+  query,
+  where,
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import { Debt } from '@/types/debt'
@@ -14,6 +15,7 @@ export const addDebt = async (uid: string, debt: Omit<Debt, 'id'>) => {
 
   const docRef = await addDoc(ref, {
     ...debt,
+    deletedAt: null,
     createdAt: new Date().toISOString(),
   })
 
@@ -22,7 +24,10 @@ export const addDebt = async (uid: string, debt: Omit<Debt, 'id'>) => {
 
 export const getDebts = async (uid: string): Promise<Debt[]> => {
   const ref = collection(db, 'users', uid, 'debts')
-  const snap = await getDocs(ref)
+
+  const q = query(ref, where('deletedAt', '==', null))
+
+  const snap = await getDocs(q)
 
   return snap.docs.map((d) => ({
     id: d.id,
@@ -39,6 +44,7 @@ export const editDebt = async (
 
   await updateDoc(ref, {
     ...updatedData,
+    deletedAt: null,
     updatedAt: new Date().toISOString(),
   })
 
@@ -48,7 +54,9 @@ export const editDebt = async (
 export const deleteDebt = async (uid: string, debtId: string) => {
   const ref = doc(db, 'users', uid, 'debts', debtId)
 
-  await deleteDoc(ref)
+  await updateDoc(ref, {
+    deletedAt: new Date().toISOString(),
+  })
 
   return true
 }

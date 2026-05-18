@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { Calendar, Trash2, Edit2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Debt } from '@/types'
+import Modal from '@/components/common/Modal'
 import { formatCurrency, getDaysUntilDue } from '../shared'
 
 interface DebtCardProps {
@@ -17,8 +19,14 @@ export const DebtCard: React.FC<DebtCardProps> = ({
   onEdit,
 }) => {
   const { t, i18n } = useTranslation()
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
   const daysUntilDue = getDaysUntilDue(debt.dueDate)
   const isOverdue = daysUntilDue < 0
+
+  const handleConfirmDelete = () => {
+    onDelete(debt.id)
+    setIsDeleteConfirmOpen(false)
+  }
 
   return (
     <div className="group relative bg-slate-700/50 rounded-lg p-4 border border-slate-600/50 hover:border-slate-500 transition-all duration-300 hover:shadow-lg hover:shadow-slate-900/20">
@@ -59,7 +67,7 @@ export const DebtCard: React.FC<DebtCardProps> = ({
           )}
         </div>
 
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="flex gap-1">
           <button
             onClick={() => onEdit(debt)}
             className="p-1.5 rounded-md bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors"
@@ -67,13 +75,47 @@ export const DebtCard: React.FC<DebtCardProps> = ({
             <Edit2 className="w-5 h-5" />
           </button>
           <button
-            onClick={() => onDelete(debt.id)}
+            onClick={() => setIsDeleteConfirmOpen(true)}
             className="p-1.5 rounded-md bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
           >
             <Trash2 className="w-5 h-5" />
           </button>
         </div>
       </div>
+
+      <Modal
+        open={isDeleteConfirmOpen}
+        onClose={() => setIsDeleteConfirmOpen(false)}
+        title={t('debt.list.confirmDelete', 'Xác nhận xóa')}
+      >
+        <div className="space-y-4">
+          <p className="text-slate-300">
+            {t('debt.list.deleteConfirmMessage')}
+          </p>
+          <p className="text-slate-400 text-sm">
+            {t('debt.list.amount')}:{' '}
+            <span
+              className={`font-semibold ${color === 'green' ? 'text-green-400' : 'text-red-400'}`}
+            >
+              {formatCurrency(debt.amount)}
+            </span>
+          </p>
+          <div className="flex gap-3 justify-end pt-2">
+            <button
+              onClick={() => setIsDeleteConfirmOpen(false)}
+              className="px-4 py-2 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors"
+            >
+              {t('cancel')}
+            </button>
+            <button
+              onClick={handleConfirmDelete}
+              className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white transition-colors"
+            >
+              {t('delete')}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }

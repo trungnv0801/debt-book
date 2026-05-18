@@ -5,6 +5,7 @@ export default {
   },
   add: 'Thêm',
   save: 'Lưu',
+  delete: 'Xóa',
   cancel: 'Hủy',
   clear: 'Đặt lại',
   noResult: 'Không có kết quả phù hợp',
