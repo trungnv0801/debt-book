@@ -18,9 +18,11 @@ import SearchForm from './components/SearchForm'
 export default function DebtView() {
   const { t } = useTranslation()
   const formRef = useRef<HTMLDivElement>(null)
-  const { debts, loading, addDebt, getDebts, deleteDebt, editDebt } = useDebts()
+  const { debts, loading, addMultipleDebts, getDebts, deleteDebt, editDebt } =
+    useDebts()
   const [showForm, setShowForm] = useState(false)
   const [newDebt, setNewDebt] = useState<Debt>(INITIAL_DEBT)
+  const [selectedPersonIds, setSelectedPersonIds] = useState<string[]>([])
   const personsHook = usePersons()
   const { persons, getPersons } = personsHook
   const [search, setSearch] = useState<DebtSearch>(INITIAL_DEBT_SEARCH)
@@ -52,23 +54,30 @@ export default function DebtView() {
   )
 
   const handleSubmit = async () => {
-    const { id, personId, amount, date, type, dueDate, note } = newDebt
+    const { id, amount, date, type, dueDate, note } = newDebt
 
-    if (!personId || !amount || !date) return
+    if (selectedPersonIds.length === 0 || !amount || !date) return
 
-    const payload = {
+    const debtData = {
       type,
-      personId: personId.trim(),
       amount,
       date,
       dueDate,
       note: note.trim(),
     }
 
-    const action = id ? editDebt(id, payload) : addDebt(payload)
-    await action
+    if (id) {
+      await editDebt(id, debtData)
+    } else {
+      const newDebts = selectedPersonIds.map((personId) => ({
+        ...debtData,
+        personId,
+      }))
+      await addMultipleDebts(newDebts)
+    }
 
     setNewDebt(INITIAL_DEBT)
+    setSelectedPersonIds([])
     setShowForm(false)
   }
 
@@ -76,6 +85,7 @@ export default function DebtView() {
 
   const handleEditDebt = (debt: Debt) => {
     setNewDebt(debt)
+    setSelectedPersonIds([debt.personId])
     setShowForm(true)
   }
 
@@ -114,7 +124,13 @@ export default function DebtView() {
 
         <div className="mb-6 flex gap-3">
           <button
-            onClick={() => setShowForm(!showForm)}
+            onClick={() => {
+              setShowForm(!showForm)
+              if (showForm) {
+                setNewDebt(INITIAL_DEBT)
+                setSelectedPersonIds([])
+              }
+            }}
             className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg"
           >
             <PlusCircle className="w-5 h-5" />
@@ -128,7 +144,9 @@ export default function DebtView() {
             handleSubmit={handleSubmit}
             setShowAddForm={setShowForm}
             newDebt={newDebt}
+            selectedPersonIds={selectedPersonIds}
             setNewDebt={setNewDebt}
+            setSelectedPersonIds={setSelectedPersonIds}
             personsHook={personsHook}
           />
         )}

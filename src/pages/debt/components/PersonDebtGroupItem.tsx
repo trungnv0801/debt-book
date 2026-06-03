@@ -60,21 +60,23 @@ const PersonDebtGroupItem: React.FC<PersonDebtGroupItemProps> = ({
           <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
             <span
               className={`text-sm font-bold shrink-0 ${
-                group.isOffset && group.netAmount === 0
-                  ? 'line-through text-slate-500'
-                  : color === 'green'
-                    ? 'text-green-400'
+                color === 'green'
+                  ? group.isOffset
+                    ? 'text-green-400 opacity-60'
+                    : 'text-green-400'
+                  : group.isOffset
+                    ? 'text-red-400 opacity-60'
                     : 'text-red-400'
               }`}
             >
               {formatCurrency(group.totalAmount)}
             </span>
 
-            {group.isOffset && group.netAmount > 0 && (
-              <span className="text-xs text-slate-400 shrink-0 whitespace-nowrap">
+            {group.isOffset && (
+              <span className="text-sm text-slate-400 shrink-0 whitespace-nowrap">
                 {'→ '}
                 <span
-                  className={`font-bold ${color === 'green' ? 'text-green-300' : 'text-red-300'}`}
+                  className={`font-bold ${color === 'green' ? 'text-green-400' : 'text-red-400'}`}
                 >
                   {formatCurrency(group.netAmount)}
                 </span>

@@ -1,5 +1,11 @@
 import { useState, useCallback } from 'react'
-import { addDebt, getDebts, editDebt, deleteDebt } from '@/services/debt'
+import {
+  addDebt,
+  addMultipleDebts,
+  getDebts,
+  editDebt,
+  deleteDebt,
+} from '@/services/debt'
 import { Debt } from '@/types/debt'
 import { useAuthContext } from './auth'
 
@@ -44,6 +50,35 @@ export const useDebts = () => {
         ])
 
         return res.id
+      } catch (err: any) {
+        setError(err.message)
+        return null
+      } finally {
+        setLoading(false)
+      }
+    },
+    [uid],
+  )
+
+  const handleAddMultipleDebts = useCallback(
+    async (debts: Array<Omit<Debt, 'id'>>) => {
+      if (!uid) return
+
+      setLoading(true)
+      setError(null)
+
+      try {
+        const res = await addMultipleDebts(uid, debts)
+
+        setDebts((prev) => [
+          ...prev,
+          ...(res.ids.map((id, idx) => ({
+            id,
+            ...debts[idx],
+          })) as Debt[]),
+        ])
+
+        return res.ids
       } catch (err: any) {
         setError(err.message)
         return null
@@ -110,6 +145,7 @@ export const useDebts = () => {
     error,
     getDebts: fetchDebts,
     addDebt: handleAddDebt,
+    addMultipleDebts: handleAddMultipleDebts,
     editDebt: handleEditDebt,
     deleteDebt: handleDeleteDebt,
   }
