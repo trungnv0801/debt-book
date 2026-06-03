@@ -86,7 +86,7 @@ export const DebtCard: React.FC<DebtCardProps> = ({
       <Modal
         open={isDeleteConfirmOpen}
         onClose={() => setIsDeleteConfirmOpen(false)}
-        title={t('debt.list.confirmDelete', 'Xác nhận xóa')}
+        title={t('debt.list.confirmDelete')}
       >
         <div className="space-y-4">
           <p className="text-slate-300">

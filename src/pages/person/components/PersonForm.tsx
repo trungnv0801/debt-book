@@ -20,6 +20,7 @@ const PersonForm: React.FC<Props> = ({ person, onSave, onCancel }) => {
         placeholder={t('person.name')}
         value={name}
         onChange={(e) => setName(e.target.value)}
+        onBlur={() => setName(name.trim())}
         className="w-full bg-slate-700 text-white px-4 py-2 rounded-lg mb-3"
       />
 

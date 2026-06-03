@@ -22,6 +22,25 @@ export const addDebt = async (uid: string, debt: Omit<Debt, 'id'>) => {
   return { id: docRef.id }
 }
 
+export const addMultipleDebts = async (
+  uid: string,
+  debts: Array<Omit<Debt, 'id'>>,
+) => {
+  const ref = collection(db, 'users', uid, 'debts')
+  const ids: string[] = []
+
+  for (const debt of debts) {
+    const docRef = await addDoc(ref, {
+      ...debt,
+      deletedAt: null,
+      createdAt: new Date().toISOString(),
+    })
+    ids.push(docRef.id)
+  }
+
+  return { ids }
+}
+
 export const getDebts = async (uid: string): Promise<Debt[]> => {
   const ref = collection(db, 'users', uid, 'debts')
 
