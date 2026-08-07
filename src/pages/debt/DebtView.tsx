@@ -42,8 +42,18 @@ export default function DebtView() {
       )
         return false
 
-      if (search.date && debt.date < search.date) return false
-      if (search.dueDate && debt.date > search.dueDate) return false
+      if (
+        search.dateFrom &&
+        search.dateTo &&
+        (debt.date < search.dateFrom || debt.date > search.dateTo)
+      )
+        return false
+      if (
+        search.dueDateFrom &&
+        search.dueDateTo &&
+        (debt.dueDate < search.dueDateFrom || debt.dueDate > search.dueDateTo)
+      )
+        return false
       return true
     })
   }, [debts, search])

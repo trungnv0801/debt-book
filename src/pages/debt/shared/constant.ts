@@ -13,7 +13,9 @@ export type DebtType = (typeof DEBT_TYPES)[keyof typeof DEBT_TYPES]
 
 export const INITIAL_DEBT_SEARCH: DebtSearch = {
   personId: '',
-  date: '',
-  dueDate: '',
+  dateFrom: '',
+  dateTo: '',
+  dueDateFrom: '',
+  dueDateTo: '',
   note: '',
 }

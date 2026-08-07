@@ -3,5 +3,13 @@ import LanguageSwitcher from './Header/LanguageSwitcher'
 import Loading from './Loading'
 import Modal from './Modal'
 import SearchSelect from './SearchSelect'
+import DateRangePicker from './DateRangePicker'
 
-export { AvatarDropdown, LanguageSwitcher, Loading, Modal, SearchSelect }
+export {
+  AvatarDropdown,
+  LanguageSwitcher,
+  Loading,
+  Modal,
+  SearchSelect,
+  DateRangePicker,
+}
