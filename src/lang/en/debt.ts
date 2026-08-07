@@ -32,11 +32,23 @@ const debt = {
   },
   search: {
     title: 'Search',
+    hint: 'Filter by person, note or date range',
     person: {
       input: 'Person name',
       select: 'Select person name ...',
     },
     note: 'Note',
+    notePlaceholder: 'Search in notes ...',
+    fromDate: 'From date',
+    toDate: 'To date',
+    clearAll: 'Clear all',
+    results_one: '{{count}} transaction found',
+    results_other: '{{count}} transactions found',
+    preset: {
+      last30Days: 'Last 30 days',
+      thisMonth: 'This month',
+      thisYear: 'This year',
+    },
   },
   noMatchingPerson: 'No matching person found',
   offsetApplied: 'Offset {{amount}}',

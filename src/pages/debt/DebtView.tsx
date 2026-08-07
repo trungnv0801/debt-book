@@ -120,6 +120,7 @@ export default function DebtView() {
           value={search}
           onChange={setSearch}
           personsHook={personsHook}
+          resultCount={filteredDebts.length}
         />
 
         <div className="mb-6 flex gap-3">
