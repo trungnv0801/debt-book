@@ -32,11 +32,22 @@ const debt = {
   },
   search: {
     title: 'Tìm kiếm',
+    hint: 'Lọc theo người, ghi chú hoặc khoảng thời gian',
     person: {
       input: 'Tên người',
       select: 'Tìm kiếm tên người ...',
     },
     note: 'Ghi chú',
+    notePlaceholder: 'Tìm trong ghi chú ...',
+    fromDate: 'Từ ngày',
+    toDate: 'Đến ngày',
+    clearAll: 'Xóa tất cả',
+    results_other: 'Tìm thấy {{count}} giao dịch',
+    preset: {
+      last30Days: '30 ngày qua',
+      thisMonth: 'Tháng này',
+      thisYear: 'Năm nay',
+    },
   },
   noMatchingPerson: 'Không tìm thấy người phù hợp',
   offsetApplied: 'Bù trừ {{amount}}',
