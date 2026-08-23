@@ -26,3 +26,8 @@ dist-ssr
 .firebaserc
 .firebase
 tsconfig.tsbuildinfo
+
+# Firebase emulator export/import data
+firebase-export*
+firebase-debug.log
+firestore-debug.log
