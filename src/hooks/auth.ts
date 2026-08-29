@@ -1,4 +1,5 @@
 import { useCallback, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import {
   confirmResetPassword,
@@ -7,10 +8,11 @@ import {
   resetPasswordUser,
   verifyResetPasswordCode,
 } from '@/services/auth'
-import { UID } from '@/utils'
+import { getFirebaseAuthErrorMessage, UID } from '@/utils'
 import { AuthContext } from '@/contexts/AuthContext'
 
 export const useAuth = () => {
+  const { t } = useTranslation()
   const { setUid } = useAuthContext()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
@@ -28,8 +30,8 @@ export const useAuth = () => {
       setUid(data.uid)
 
       return data
-    } catch (err: any) {
-      setError(err.message ?? 'Unknown error')
+    } catch (err: unknown) {
+      setError(getFirebaseAuthErrorMessage(err, t))
     } finally {
       setLoading(false)
     }
@@ -45,8 +47,8 @@ export const useAuth = () => {
       localStorage.removeItem(UID)
       setUid(null)
       navigate('/login')
-    } catch (err: any) {
-      setError(err.message ?? '')
+    } catch (err: unknown) {
+      setError(getFirebaseAuthErrorMessage(err, t))
     } finally {
       setLoading(false)
     }
@@ -59,28 +61,31 @@ export const useAuth = () => {
 
       await resetPasswordUser(email)
       setIsSuccess(true)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(getFirebaseAuthErrorMessage(err, t))
       setIsSuccess(false)
     } finally {
       setLoading(false)
     }
   }
 
-  const verifyResetCode = useCallback(async (oobCode: string) => {
-    try {
-      setLoading(true)
-      setError(null)
+  const verifyResetCode = useCallback(
+    async (oobCode: string) => {
+      try {
+        setLoading(true)
+        setError(null)
 
-      await verifyResetPasswordCode(oobCode)
-      setIsValidOobCode(true)
-    } catch (err: any) {
-      setError(err.message)
-      setIsValidOobCode(false)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+        await verifyResetPasswordCode(oobCode)
+        setIsValidOobCode(true)
+      } catch (err: unknown) {
+        setError(getFirebaseAuthErrorMessage(err, t))
+        setIsValidOobCode(false)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [t],
+  )
 
   const resetPasswordConfirm = async (oobCode: string, newPassword: string) => {
     try {
@@ -89,8 +94,8 @@ export const useAuth = () => {
 
       await confirmResetPassword(oobCode, newPassword)
       setIsSuccess(true)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(getFirebaseAuthErrorMessage(err, t))
       setIsSuccess(false)
     } finally {
       setLoading(false)

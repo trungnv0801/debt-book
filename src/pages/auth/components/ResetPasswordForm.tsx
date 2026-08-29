@@ -22,7 +22,7 @@ export default function ResetPasswordForm(props: Props) {
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const { resetPasswordConfirm, loading, isSuccess } = useAuth()
+  const { resetPasswordConfirm, loading, isSuccess, error } = useAuth()
   const { firstError, isValid } = usePasswordRules(formData.password)
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -136,6 +136,10 @@ export default function ResetPasswordForm(props: Props) {
                 </div>
               )}
             </div>
+
+            {error && (
+              <p className="text-red-300 text-sm text-center">{error}</p>
+            )}
 
             <button
               type="submit"
