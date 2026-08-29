@@ -11,7 +11,8 @@ export default function ResetPasswordView() {
   const { t } = useTranslation()
   const [params] = useSearchParams()
   const oobCode = params.get('oobCode')
-  const { verifyResetCode, isSuccess, isValidOobCode, loading } = useAuth()
+  const { verifyResetCode, isSuccess, isValidOobCode, loading, error } =
+    useAuth()
 
   useEffect(() => {
     if (!oobCode) return
@@ -47,7 +48,7 @@ export default function ResetPasswordView() {
             </div>
           </div>
         ) : !isValidOobCode ? (
-          <InvalidOobCode />
+          <InvalidOobCode message={error} />
         ) : (
           <ResetPasswordForm oobCode={oobCode} />
         )}

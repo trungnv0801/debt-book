@@ -13,6 +13,29 @@ const auth = {
   or: 'or',
   noAccount: "Don't have an account?",
   signUp: 'Sign up now',
+  errors: {
+    default: 'Something went wrong. Please try again.',
+    invalidEmail: 'The email address is invalid.',
+    missingEmail: 'Please enter your email address.',
+    missingPassword: 'Please enter your password.',
+    invalidCredential: 'The email or password is incorrect.',
+    userDisabled: 'This account has been disabled.',
+    emailAlreadyInUse: 'This email address is already in use.',
+    weakPassword: 'The password is not strong enough.',
+    operationNotAllowed: 'This sign-in method is not enabled.',
+    tooManyRequests: 'Too many attempts. Please try again later.',
+    networkRequestFailed:
+      'Unable to connect to the server. Please check your network connection.',
+    invalidActionCode: 'The verification link is invalid or has been used.',
+    expiredActionCode: 'The verification link has expired.',
+    requiresRecentLogin: 'Please sign in again to continue.',
+    sessionExpired: 'Your session has expired. Please sign in again.',
+    quotaExceeded:
+      'The service is temporarily unavailable. Please try again later.',
+    unauthorizedDomain: 'This domain is not authorized.',
+    internalError:
+      'Firebase encountered an internal error. Please try again later.',
+  },
   forgotPassword: {
     title: 'Forgot Password',
     subtitle: 'Reset Your Password',

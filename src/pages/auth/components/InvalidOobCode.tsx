@@ -2,7 +2,11 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { XCircle } from 'lucide-react'
 
-export default function InvalidOobCode() {
+interface InvalidOobCodeProps {
+  message?: string | null
+}
+
+export default function InvalidOobCode({ message }: InvalidOobCodeProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -16,7 +20,7 @@ export default function InvalidOobCode() {
           {t('auth.resetPassword.invalidCode.title')}
         </h3>
         <p className="text-slate-400 mb-2">
-          {t('auth.resetPassword.invalidCode.description')}
+          {message ?? t('auth.resetPassword.invalidCode.description')}
         </p>
         <div className="bg-slate-700 border border-slate-600 rounded-xl p-4 my-6">
           <p className="text-slate-300 text-sm">
