@@ -13,7 +13,7 @@ interface DebtFormProps {
   newDebt: Debt
   selectedPersonIds: string[]
   personsHook: ReturnType<typeof usePersons>
-  ref: React.Ref<HTMLDivElement>
+  ref?: React.Ref<HTMLDivElement>
   setNewDebt: React.Dispatch<React.SetStateAction<Debt>>
   setSelectedPersonIds: React.Dispatch<React.SetStateAction<string[]>>
   handleSubmit: () => void
@@ -73,9 +73,9 @@ const DebtForm: React.FC<DebtFormProps> = ({
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-4">
           <div>
-            <label className="text-slate-400 text-sm block mb-2">
+            <label className="text-slate-400 text-sm block mb-1">
               {t('debt.form.personName')}
             </label>
             {isEditMode ? (
@@ -102,7 +102,9 @@ const DebtForm: React.FC<DebtFormProps> = ({
             onClose={() => setShowPersonManager(false)}
             title={t('person.managePersons')}
           >
-            <PersonList personsHook={personsHook} />
+            <div data-person-manager>
+              <PersonList personsHook={personsHook} />
+            </div>
           </Modal>
 
           <div>
@@ -124,7 +126,7 @@ const DebtForm: React.FC<DebtFormProps> = ({
                   amount: cleaned ? Number(cleaned) : 0,
                 })
               }}
-              className="w-full bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="h-12 w-full min-w-0 bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -135,7 +137,7 @@ const DebtForm: React.FC<DebtFormProps> = ({
               type="date"
               value={newDebt.date}
               onChange={(e) => setNewDebt({ ...newDebt, date: e.target.value })}
-              className="w-full bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="h-12 w-full min-w-0 bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -148,7 +150,7 @@ const DebtForm: React.FC<DebtFormProps> = ({
               onChange={(e) =>
                 setNewDebt({ ...newDebt, dueDate: e.target.value })
               }
-              className="w-full bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="h-12 w-full min-w-0 bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <input
@@ -156,13 +158,16 @@ const DebtForm: React.FC<DebtFormProps> = ({
             placeholder={t('debt.form.note')}
             value={newDebt.note}
             onChange={(e) => setNewDebt({ ...newDebt, note: e.target.value })}
-            className="md:col-span-2 bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="h-12 min-w-0 md:col-span-2 bg-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="flex gap-3 mt-4">
           <button
             disabled={
-              !newDebt.amount || !newDebt.date || selectedPersonIds.length == 0
+              !newDebt.amount ||
+              newDebt.amount < (newDebt.paidAmount ?? 0) ||
+              !newDebt.date ||
+              selectedPersonIds.length == 0
             }
             onClick={() => handleSubmit()}
             className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl font-semibold transition-all cursor-pointer disabled:bg-slate-400 disabled:text-slate-200 disabled:cursor-not-allowed disabled:hover:bg-slate-400"

@@ -1,69 +1,77 @@
 import { useState, useRef, useEffect, useContext } from 'react'
+import { LogOut } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/hooks/auth'
 import { AuthContext } from '@/contexts'
 
-const AvatarDropdown = () => {
+export default function AvatarDropdown() {
   const [isOpen, setIsOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const avatarRef = useRef<HTMLButtonElement>(null)
+  const signOutRef = useRef<HTMLButtonElement>(null)
   const { logout, loading } = useAuth()
   const { email } = useContext(AuthContext)
+  const { t } = useTranslation()
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    if (!isOpen) return
+    signOutRef.current?.focus()
+    const handleClickOutside = (event: MouseEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        avatarRef.current &&
-        !avatarRef.current.contains(event.target)
-      ) {
+        event.target instanceof Node &&
+        !containerRef.current?.contains(event.target)
+      )
         setIsOpen(false)
-      }
     }
     document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
-
-  const toggleDropdown = () => setIsOpen(!isOpen)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
 
   return (
-    <div className="flex justify-end">
-      <div className="relative">
-        <button
-          ref={avatarRef}
-          onClick={toggleDropdown}
-          className="flex items-center space-x-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          aria-label="User menu"
-          aria-haspopup="true"
+    <div
+      ref={containerRef}
+      className="relative"
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false)
+      }}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') {
+          setIsOpen(false)
+          avatarRef.current?.focus()
+        }
+      }}
+    >
+      <button
+        ref={avatarRef}
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex h-11 w-11 items-center justify-center rounded-full"
+        aria-label={t('ui.account')}
+        aria-expanded={isOpen}
+        aria-controls="account-panel"
+      >
+        <span className="grid h-10 w-10 place-items-center rounded-full border border-blue-400/30 bg-blue-500/15 text-sm font-semibold text-blue-200">
+          {email?.charAt(0).toLocaleUpperCase() || '?'}
+        </span>
+      </button>
+      {isOpen && (
+        <div
+          id="account-panel"
+          className="ui-panel absolute right-0 z-30 mt-3 w-64 max-w-[calc(100vw-2rem)] p-2 shadow-xl shadow-black/30"
         >
-          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-sky-600 text-white font-semibold">
-            {email?.charAt(0).toLocaleUpperCase()}
-          </div>
-        </button>
-
-        {isOpen && (
-          <div
-            ref={dropdownRef}
-            className="bg-gradient-to-br origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="user-menu"
+          <p className="break-all border-b border-slate-700 px-3 py-3 text-sm text-slate-300">
+            {email}
+          </p>
+          <button
+            ref={signOutRef}
+            onClick={() => void logout()}
+            disabled={loading}
+            className="mt-2 flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-sm text-slate-200 transition-colors hover:bg-slate-700 disabled:opacity-50"
           >
-            <button
-              onClick={logout}
-              disabled={loading}
-              className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
-              role="menuitem"
-            >
-              Sign out
-            </button>
-          </div>
-        )}
-      </div>
+            <LogOut className="h-4 w-4" aria-hidden="true" />
+            {t('ui.signOut')}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
-
-export default AvatarDropdown

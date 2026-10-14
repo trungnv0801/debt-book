@@ -56,16 +56,19 @@ const SearchSelect = ({
   }, [open])
 
   return (
-    <div ref={containerRef} className="relative w-full">
+    <div ref={containerRef} className="relative min-w-0 w-full flex-1">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-full bg-slate-700 text-white px-4 py-3 rounded-xl flex justify-between items-center"
+        className="h-12 w-full min-w-0 bg-slate-700 text-white px-4 rounded-xl flex justify-between items-center gap-2"
       >
-        <span className={selected ? '' : 'text-slate-400'}>
+        <span
+          title={selected?.label || placeholder}
+          className={`min-w-0 truncate text-left ${selected ? '' : 'text-slate-400'}`}
+        >
           {selected?.label || placeholder}
         </span>
-        <ChevronDown className="w-4 h-4" />
+        <ChevronDown className="w-4 h-4 shrink-0" aria-hidden="true" />
       </button>
 
       {open && (

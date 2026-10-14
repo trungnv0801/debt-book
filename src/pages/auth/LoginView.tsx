@@ -1,7 +1,18 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { Lock, User, Eye, EyeOff } from 'lucide-react'
+import {
+  Lock,
+  User,
+  Eye,
+  EyeOff,
+  BookOpen,
+  Wallet,
+  Users,
+  Search,
+  ArrowRight,
+  Loader2,
+} from 'lucide-react'
 import { useAuth } from '@/hooks/auth'
 import LanguageSwitcher from '@/components/common/Header/LanguageSwitcher'
 
@@ -21,26 +32,78 @@ export default function LoginView() {
   }
 
   return (
-    <div className="min-h-[100dvh] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
-        <div className="flex justify-end mb-4">
-          <LanguageSwitcher />
+    <div className="app-background flex min-h-[100dvh] flex-col">
+      <header className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-5 sm:px-8">
+        <div className="flex items-center gap-3 text-lg font-semibold text-white">
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-blue-600">
+            <BookOpen className="h-5 w-5" aria-hidden="true" />
+          </span>
+          {t('debt.title')}
         </div>
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            {t('debt.title')}
-          </h1>
-          <p className="text-slate-400">{t('debt.subtitle')}</p>
-        </div>
-
-        <div className="bg-slate-800 rounded-2xl p-8 shadow-2xl border border-slate-700">
-          <h2 className="text-2xl font-bold text-white mb-6">
-            {t('auth.title')}
+        <LanguageSwitcher />
+      </header>
+      <main className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 items-center gap-12 px-4 py-8 sm:px-8 lg:grid-cols-2 lg:gap-20 lg:py-16">
+        <section className="hidden lg:block">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-widest text-blue-300">
+            {t('debt.subtitle')}
+          </p>
+          <h2 className="max-w-lg text-5xl font-semibold leading-tight tracking-tight text-white">
+            {t('ui.loginHeadline')}
           </h2>
+          <p className="mt-6 max-w-md text-lg leading-8 text-slate-400">
+            {t('ui.loginDescription')}
+          </p>
+          <div className="mt-10 space-y-6">
+            {[
+              {
+                icon: Wallet,
+                title: 'ui.featureBalance',
+                hint: 'ui.featureBalanceHint',
+              },
+              {
+                icon: Users,
+                title: 'ui.featurePeople',
+                hint: 'ui.featurePeopleHint',
+              },
+              {
+                icon: Search,
+                title: 'ui.featureSearch',
+                hint: 'ui.featureSearchHint',
+              },
+            ].map((feature) => (
+              <div key={feature.title} className="flex items-center gap-4">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-slate-700 bg-slate-800/70 text-blue-300">
+                  <feature.icon className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <div>
+                  <h3 className="font-medium text-slate-100">
+                    {t(feature.title)}
+                  </h3>
+                  <p className="mt-1 text-sm text-slate-400">
+                    {t(feature.hint)}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className="ui-panel mx-auto min-w-0 w-full max-w-md p-6 shadow-2xl shadow-black/20 sm:p-8 lg:p-10">
+          <p className="mb-2 text-sm font-medium text-blue-300">
+            {t('ui.welcome')}
+          </p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">
+            {t('auth.title')}
+          </h1>
+          <p className="mb-8 mt-3 text-sm leading-6 text-slate-400">
+            {t('ui.loginHint')}
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="text-slate-400 text-sm block mb-2">
+              <label
+                htmlFor="login-email"
+                className="text-slate-300 text-sm font-medium block mb-2"
+              >
                 {t('auth.email')}
               </label>
               <div className="relative">
@@ -48,8 +111,10 @@ export default function LoginView() {
                   <User className="w-5 h-5" />
                 </div>
                 <input
+                  id="login-email"
+                  autoComplete="email"
                   type="email"
-                  className="w-full bg-slate-700 text-white pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className="ui-input pl-12 pr-4"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t('auth.emailPlaceholder')}
@@ -59,7 +124,10 @@ export default function LoginView() {
             </div>
 
             <div>
-              <label className="text-slate-400 text-sm block mb-2">
+              <label
+                htmlFor="login-password"
+                className="text-slate-300 text-sm font-medium block mb-2"
+              >
                 {t('auth.password')}
               </label>
               <div className="relative">
@@ -67,8 +135,10 @@ export default function LoginView() {
                   <Lock className="w-5 h-5" />
                 </div>
                 <input
+                  id="login-password"
+                  autoComplete="current-password"
                   type={showPassword ? 'text' : 'password'}
-                  className="w-full bg-slate-700 text-white pl-12 pr-12 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className="ui-input pl-12 pr-12"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={t('auth.passwordPlaceholder')}
@@ -77,8 +147,11 @@ export default function LoginView() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
-                  tabIndex={-1}
+                  className="ui-icon-button absolute right-1 top-1/2 -translate-y-1/2"
+                  aria-label={t(
+                    showPassword ? 'ui.hidePassword' : 'ui.showPassword',
+                  )}
+                  aria-pressed={showPassword}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -93,50 +166,45 @@ export default function LoginView() {
               <button
                 type="button"
                 onClick={() => navigate('/forgot-password')}
-                className="ml-auto text-blue-400 hover:text-blue-300 transition-colors"
+                className="ml-auto min-h-11 text-blue-300 hover:text-blue-200 transition-colors"
               >
                 {t('auth.login.forgotPassword')}
               </button>
             </div>
 
             {error && (
-              <p className="text-red-300 text-sm mt-0 text-center">{error}</p>
+              <p
+                role="alert"
+                className="rounded-xl border border-red-400/20 bg-red-500/10 p-3 text-red-300 text-sm"
+              >
+                {error}
+              </p>
             )}
 
             <button
               type="submit"
               disabled={loading || !email || !password}
-              className={`w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-lg ${
-                loading || !email || !password
-                  ? 'opacity-50 cursor-not-allowed'
-                  : ''
-              }`}
+              className="ui-primary w-full"
+              aria-busy={loading}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <Loader2
+                    className="h-5 w-5 animate-spin"
+                    aria-hidden="true"
+                  />
                   {t('auth.login.loading')}
                 </span>
               ) : (
-                t('auth.login.button')
+                <>
+                  {t('auth.login.button')}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </>
               )}
             </button>
           </form>
-
-          {/* <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-slate-700"></div>
-            <span className="text-slate-500 text-sm">{t('auth.or')}</span>
-            <div className="flex-1 h-px bg-slate-700"></div>
-          </div>
-
-          <p className="text-center text-slate-400 text-sm">
-            {t('auth.noAccount')}{' '}
-            <button className="text-blue-400 hover:text-blue-300 font-semibold transition-colors">
-              {t('auth.signUp')}
-            </button>
-          </p> */}
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   )
 }

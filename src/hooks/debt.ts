@@ -5,6 +5,8 @@ import {
   getDebts,
   editDebt,
   deleteDebt,
+  deleteMultipleDebts,
+  repayDebts,
 } from '@/services/debt'
 import { Debt } from '@/types/debt'
 import { useAuthContext } from './auth'
@@ -139,6 +141,48 @@ export const useDebts = () => {
     [uid],
   )
 
+  const handleDeleteMultipleDebts = useCallback(
+    async (ids: string[]) => {
+      if (!uid) return false
+      setLoading(true)
+      setError(null)
+      try {
+        await deleteMultipleDebts(uid, ids)
+        const deletedIds = new Set(ids)
+        setDebts((prev) => prev.filter((debt) => !deletedIds.has(debt.id)))
+        return true
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err))
+        return false
+      } finally {
+        setLoading(false)
+      }
+    },
+    [uid],
+  )
+
+  const handleRepayDebts = useCallback(
+    async (ids: string[], amount: number | 'full') => {
+      if (!uid) return false
+      setLoading(true)
+      setError(null)
+      try {
+        const updates = await repayDebts(uid, ids, amount)
+        const byId = new Map(updates.map((update) => [update.id, update]))
+        setDebts((prev) =>
+          prev.map((debt) => ({ ...debt, ...byId.get(debt.id) })),
+        )
+        return true
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err))
+        return false
+      } finally {
+        setLoading(false)
+      }
+    },
+    [uid],
+  )
+
   return {
     debts,
     loading,
@@ -148,5 +192,7 @@ export const useDebts = () => {
     addMultipleDebts: handleAddMultipleDebts,
     editDebt: handleEditDebt,
     deleteDebt: handleDeleteDebt,
+    deleteMultipleDebts: handleDeleteMultipleDebts,
+    repayDebts: handleRepayDebts,
   }
 }

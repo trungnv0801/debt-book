@@ -3,9 +3,16 @@ export interface Debt {
   type: string
   personId: string
   amount: number
+  paidAmount?: number
+  payments?: DebtPayment[]
   date: string
   dueDate: string
   note: string
+}
+
+export interface DebtPayment {
+  amount: number
+  paidAt: string
 }
 
 export interface PersonDebtGroup {

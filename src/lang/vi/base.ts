@@ -1,4 +1,28 @@
 export default {
+  ui: {
+    dialog: 'Hộp thoại',
+    personBalance: 'Số dư của người này · sau bù trừ',
+    skipContent: 'Đến nội dung chính',
+    overview: 'Tổng quan công nợ',
+    peopleTitle: 'Công nợ theo người',
+    emptyHint: 'Thêm giao dịch đầu tiên để bắt đầu theo dõi công nợ.',
+    filterEmptyHint: 'Thử thay đổi hoặc xóa bộ lọc để xem thêm kết quả.',
+    account: 'Tài khoản',
+    signOut: 'Đăng xuất',
+    showPassword: 'Hiện mật khẩu',
+    hidePassword: 'Ẩn mật khẩu',
+    welcome: 'Chào mừng trở lại',
+    loginHint: 'Đăng nhập để xem và quản lý sổ nợ của bạn.',
+    loginHeadline: 'Mọi khoản nợ. Một nơi rõ ràng.',
+    loginDescription:
+      'Theo dõi tiền cho mượn, tiền đi mượn và số dư của từng người trong một sổ nợ gọn gàng.',
+    featureBalance: 'Nắm rõ số dư',
+    featureBalanceHint: 'Biết ngay khoản còn phải thu và phải trả.',
+    featurePeople: 'Theo dõi theo người',
+    featurePeopleHint: 'Xem các giao dịch hai chiều trong cùng một nơi.',
+    featureSearch: 'Tìm lại dễ dàng',
+    featureSearchHint: 'Lọc theo người, ghi chú và khoảng thời gian.',
+  },
   language: {
     english: 'Tiếng Anh',
     vietnamese: 'Tiếng Việt',

@@ -36,7 +36,7 @@ const MultiPersonSelect: React.FC<MultiPersonSelectProps> = ({
 
   return (
     <div>
-      <div className="flex gap-2 mb-2">
+      <div className="flex items-start gap-2 w-full min-w-0">
         <SearchSelect
           options={options}
           value=""
@@ -47,14 +47,16 @@ const MultiPersonSelect: React.FC<MultiPersonSelectProps> = ({
         <button
           type="button"
           onClick={onAdd}
-          className="w-12 shrink-0 bg-slate-700 hover:bg-slate-600 text-white rounded-xl flex items-center justify-center"
+          aria-label={t('person.managePersons')}
+          title={t('person.managePersons')}
+          className="h-12 w-12 shrink-0 bg-slate-700 hover:bg-slate-600 text-white rounded-xl flex items-center justify-center"
         >
           <Plus className="w-5 h-5" />
         </button>
       </div>
 
       {value.length > 0 && (
-        <div className="flex flex-wrap gap-2">
+        <div className="mt-2 flex flex-wrap gap-2">
           {value.map((personId) => (
             <div
               key={personId}

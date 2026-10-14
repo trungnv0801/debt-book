@@ -1,3 +1,4 @@
+import { remainingAmount } from '@/utils/repayment'
 import { Debt, PersonDebtGroup } from '@/types/debt'
 import { TYPE_LENT } from './constant'
 import { THOUSAND_SEPARATOR_REGEX } from '@/utils'
@@ -31,7 +32,7 @@ export const summarizeByPerson = (debts: Debt[]) => {
 
   debts.forEach((d) => {
     if (!summary[d.id]) summary[d.id] = 0
-    summary[d.id] += d.amount
+    summary[d.id] += remainingAmount(d)
   })
 
   return summary
@@ -65,10 +66,10 @@ export function groupDebtsByPersonWithOffset(
     }
     if (debt.type === TYPE_LENT) {
       personData[debt.personId].lentDebts.push(debt)
-      personData[debt.personId].lentAmount += debt.amount
+      personData[debt.personId].lentAmount += remainingAmount(debt)
     } else {
       personData[debt.personId].borrowedDebts.push(debt)
-      personData[debt.personId].borrowedAmount += debt.amount
+      personData[debt.personId].borrowedAmount += remainingAmount(debt)
     }
   }
 
