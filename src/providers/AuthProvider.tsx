@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setEmail(user.email)
           setUid(user.uid)
         }
-      } catch (err) {
+      } catch {
         setUid(null)
       } finally {
         setLoading(false)

@@ -1,4 +1,28 @@
 export default {
+  ui: {
+    dialog: 'Dialog',
+    personBalance: 'This person’s balance · after offsets',
+    skipContent: 'Skip to main content',
+    overview: 'Debt overview',
+    peopleTitle: 'Balances by person',
+    emptyHint: 'Add your first transaction to start tracking your balances.',
+    filterEmptyHint: 'Change or clear your filters to see more results.',
+    account: 'Account',
+    signOut: 'Sign out',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
+    welcome: 'Welcome back',
+    loginHint: 'Sign in to view and manage your debt book.',
+    loginHeadline: 'Every balance. One clear place.',
+    loginDescription:
+      'Keep lending, borrowing and each person’s balance together in a simple debt book.',
+    featureBalance: 'Know your balance',
+    featureBalanceHint: 'See what you need to collect and repay.',
+    featurePeople: 'Track by person',
+    featurePeopleHint: 'Keep transactions in both directions together.',
+    featureSearch: 'Find it easily',
+    featureSearchHint: 'Filter by person, note and date range.',
+  },
   language: {
     english: 'English',
     vietnamese: 'Vietnamese',

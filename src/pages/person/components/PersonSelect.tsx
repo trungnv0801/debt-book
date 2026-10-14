@@ -25,7 +25,7 @@ const PersonSelect: React.FC<PersonSelectProps> = ({
   }))
 
   return (
-    <div className="flex gap-2 w-full">
+    <div className="flex items-start gap-2 w-full min-w-0">
       <SearchSelect
         options={options}
         value={value}
@@ -37,7 +37,9 @@ const PersonSelect: React.FC<PersonSelectProps> = ({
       <button
         type="button"
         onClick={onAdd}
-        className="w-12 shrink-0 bg-slate-700 hover:bg-slate-600 text-white rounded-xl flex items-center justify-center"
+        aria-label={t('person.managePersons')}
+        title={t('person.managePersons')}
+        className="h-12 w-12 shrink-0 bg-slate-700 hover:bg-slate-600 text-white rounded-xl flex items-center justify-center"
       >
         <Plus className="w-5 h-5" />
       </button>

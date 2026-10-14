@@ -1,3 +1,92 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --surface: 17 28 47;
+    --border: 45 61 82;
+    --primary: 37 99 235;
+    --focus: 147 197 253;
+  }
+
+  body {
+    @apply m-0 bg-slate-950 font-sans text-slate-200 antialiased;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  summary {
+    touch-action: manipulation;
+  }
+
+  button:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+
+  :where(button, a, input, select, textarea, summary):focus-visible {
+    outline: 2px solid rgb(var(--focus));
+    outline-offset: 4px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 1rem;
+  }
+
+  ::selection {
+    @apply bg-blue-500/30 text-white;
+  }
+}
+
+@layer components {
+  .app-background {
+    background:
+      radial-gradient(ellipse at 10% 0%, #172b4a 0%, transparent 45%), #0b1220;
+  }
+
+  .ui-panel {
+    @apply rounded-2xl border shadow-sm;
+    background-color: rgb(var(--surface));
+    border-color: rgb(var(--border));
+  }
+
+  .ui-primary {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-950/30 transition-colors duration-200 hover:bg-blue-700 active:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50;
+    background-color: rgb(var(--primary));
+  }
+
+  .ui-input {
+    @apply min-h-12 w-full rounded-xl border border-slate-600 bg-slate-900/60 py-3 text-white placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/30;
+  }
+
+  .ui-secondary {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-600 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .ui-icon-button {
+    @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-slate-300 transition-colors duration-200 hover:bg-slate-700 hover:text-white disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

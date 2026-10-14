@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { Debt } from '@/types'
 import Modal from '@/components/common/Modal'
 import { formatCurrency, getDaysUntilDue } from '../shared'
+import { remainingAmount } from '@/utils/repayment'
 
 interface DebtCardProps {
   debt: Debt
   color: 'red' | 'green'
   onDelete: (id: string) => void
   onEdit: (debt: Debt) => void
+  onRepay?: (debt: Debt) => void
 }
 
 export const DebtCard: React.FC<DebtCardProps> = ({
@@ -17,11 +19,13 @@ export const DebtCard: React.FC<DebtCardProps> = ({
   color,
   onDelete,
   onEdit,
+  onRepay,
 }) => {
   const { t, i18n } = useTranslation()
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
   const daysUntilDue = getDaysUntilDue(debt.dueDate)
-  const isOverdue = daysUntilDue < 0
+  const remaining = remainingAmount(debt)
+  const isOverdue = daysUntilDue < 0 && remaining > 0
 
   const handleConfirmDelete = () => {
     onDelete(debt.id)
@@ -29,28 +33,53 @@ export const DebtCard: React.FC<DebtCardProps> = ({
   }
 
   return (
-    <div className="group relative bg-slate-700/50 rounded-lg p-4 border border-slate-600/50 hover:border-slate-500 transition-all duration-300 hover:shadow-lg hover:shadow-slate-900/20">
+    <div className="ui-panel group relative p-4 transition-colors duration-200 hover:border-slate-500 sm:p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0 space-y-2">
           <div className="flex items-center justify-between gap-2">
             <span
-              className={`text-xl font-bold ${
+              className={`break-words text-xl font-semibold tabular-nums ${
                 color === 'green' ? 'text-green-400' : 'text-red-400'
               }`}
             >
-              {formatCurrency(debt.amount)}
+              {formatCurrency(remaining)}
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-sm text-slate-400">
-            <Calendar className="w-4 h-4" />
+          {!!debt.paidAmount && (
+            <p className="text-sm text-slate-400">
+              {t('debt.repayment.original')}: {formatCurrency(debt.amount)} ·{' '}
+              {t('debt.repayment.paid')}: {formatCurrency(debt.paidAmount)}
+            </p>
+          )}
+          {remaining === 0 && (
+            <p className="text-sm text-emerald-300">
+              {t('debt.repayment.settled')}
+            </p>
+          )}
+          {!!debt.payments?.length && (
+            <details className="text-sm text-slate-400">
+              <summary className="cursor-pointer">
+                {t('debt.repayment.history')}
+              </summary>
+              {debt.payments.map((payment, index) => (
+                <p key={index} className="mt-1">
+                  {new Date(payment.paidAt).toLocaleString(i18n.language)} ·{' '}
+                  {formatCurrency(payment.amount)}
+                </p>
+              ))}
+            </details>
+          )}
+
+          <div className="flex flex-wrap items-center gap-2 text-sm text-slate-400">
+            <Calendar className="w-4 h-4 shrink-0" aria-hidden="true" />
             {t('debt.list.borrowDate')}:{' '}
             {new Date(debt.date).toLocaleDateString(i18n.language)}
           </div>
 
           {debt.dueDate && (
-            <div className="flex items-center gap-4 text-sm text-slate-400">
-              <Calendar className="w-4 h-4" />
+            <div className="flex flex-wrap items-center gap-2 text-sm text-slate-400">
+              <Calendar className="w-4 h-4 shrink-0" aria-hidden="true" />
               {t('debt.list.dueDate')}:{' '}
               {new Date(debt.dueDate).toLocaleDateString(i18n.language)}
             </div>
@@ -63,20 +92,29 @@ export const DebtCard: React.FC<DebtCardProps> = ({
           )}
 
           {debt.note && (
-            <p className="text-slate-400 text-sm mt-2 italic">"{debt.note}"</p>
+            <p className="break-words text-slate-300 text-sm mt-2">
+              {debt.note}
+            </p>
           )}
         </div>
 
-        <div className="flex gap-1">
+        <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+          {onRepay && remaining > 0 && (
+            <button onClick={() => onRepay(debt)} className="ui-secondary">
+              {t('debt.repayment.title')}
+            </button>
+          )}
           <button
             onClick={() => onEdit(debt)}
-            className="p-1.5 rounded-md bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors"
+            aria-label={t('debt.updateTransaction')}
+            className="ui-icon-button bg-blue-500/10 text-blue-300 hover:bg-blue-500/20"
           >
             <Edit2 className="w-5 h-5" />
           </button>
           <button
             onClick={() => setIsDeleteConfirmOpen(true)}
-            className="p-1.5 rounded-md bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+            aria-label={t('delete')}
+            className="ui-icon-button bg-red-500/10 text-red-300 hover:bg-red-500/20"
           >
             <Trash2 className="w-5 h-5" />
           </button>
@@ -86,7 +124,7 @@ export const DebtCard: React.FC<DebtCardProps> = ({
       <Modal
         open={isDeleteConfirmOpen}
         onClose={() => setIsDeleteConfirmOpen(false)}
-        title={t('debt.list.confirmDelete')}
+        title={t('delete')}
       >
         <div className="space-y-4">
           <p className="text-slate-300">

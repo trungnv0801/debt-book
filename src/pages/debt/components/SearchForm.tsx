@@ -16,6 +16,7 @@ import { DateRangePicker, SearchSelect } from '@/components/common'
 import { INITIAL_DEBT_SEARCH } from '../shared'
 
 interface SearchFormProps {
+  hidePerson?: boolean
   value: DebtSearch
   personsHook: ReturnType<typeof usePersons>
   resultCount?: number
@@ -44,6 +45,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
   value,
   personsHook,
   resultCount,
+  hidePerson = false,
   onChange,
 }) => {
   const { t } = useTranslation()
@@ -113,7 +115,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
   const hasFilter = chips.length > 0
 
   return (
-    <section className="mb-6 bg-slate-800 rounded-2xl border border-slate-700 shadow-xl">
+    <section className="ui-panel mb-8">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -125,10 +127,10 @@ const SearchForm: React.FC<SearchFormProps> = ({
         </span>
 
         <span className="min-w-0 flex-1">
-          <span className="block text-xl font-semibold text-white">
+          <span className="block text-base font-semibold text-white">
             {t('debt.search.title')}
           </span>
-          <span className="block text-sm text-slate-400 truncate">
+          <span className="mt-1 block text-sm text-slate-400">
             {hasFilter
               ? t('debt.search.results', { count: resultCount ?? 0 })
               : t('debt.search.hint')}
@@ -161,7 +163,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
                 type="button"
                 onClick={chip.onRemove}
                 aria-label={t('clear')}
-                className="shrink-0 grid place-items-center w-5 h-5 rounded-full transition hover:bg-white/10"
+                className="shrink-0 grid place-items-center w-11 h-11 rounded-full transition hover:bg-white/10"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -171,7 +173,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           <button
             type="button"
             onClick={handleClear}
-            className="px-3 py-1 rounded-full text-sm font-medium text-slate-400 transition hover:text-white"
+            className="min-h-11 px-3 py-1 rounded-full text-sm font-medium text-slate-300 transition hover:text-white"
           >
             {t('debt.search.clearAll')}
           </button>
@@ -180,32 +182,36 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       {open && (
         <div className="px-5 pb-5 space-y-4 border-t border-slate-700 pt-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="flex items-center gap-1.5 text-slate-400 text-sm mb-2">
-                <User className="w-4 h-4" />
-                {t('debt.search.person.input')}
-              </label>
-              <div className="relative">
-                <SearchSelect
-                  options={options}
-                  value={value.personId}
-                  onChange={(personId) => onChange({ ...value, personId })}
-                  placeholder={t('debt.search.person.input')}
-                  searchPlaceholder={t('debt.search.person.select')}
-                />
-                {value.personId && (
-                  <button
-                    type="button"
-                    onClick={() => handleRemove('personId')}
-                    aria-label={t('clear')}
-                    className="absolute right-10 top-1/2 -translate-y-1/2 grid place-items-center w-6 h-6 rounded-full text-slate-400 transition hover:bg-slate-600 hover:text-white"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
+          <div
+            className={`grid grid-cols-1 gap-4 ${hidePerson ? '' : 'md:grid-cols-2'}`}
+          >
+            {!hidePerson && (
+              <div>
+                <label className="flex items-center gap-1.5 text-slate-400 text-sm mb-2">
+                  <User className="w-4 h-4" />
+                  {t('debt.search.person.input')}
+                </label>
+                <div className="relative">
+                  <SearchSelect
+                    options={options}
+                    value={value.personId}
+                    onChange={(personId) => onChange({ ...value, personId })}
+                    placeholder={t('debt.search.person.input')}
+                    searchPlaceholder={t('debt.search.person.select')}
+                  />
+                  {value.personId && (
+                    <button
+                      type="button"
+                      onClick={() => handleRemove('personId')}
+                      aria-label={t('clear')}
+                      className="absolute right-10 top-1/2 -translate-y-1/2 grid place-items-center w-6 h-6 rounded-full text-slate-400 transition hover:bg-slate-600 hover:text-white"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             <div>
               <label

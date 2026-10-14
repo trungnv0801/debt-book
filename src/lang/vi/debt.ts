@@ -1,8 +1,53 @@
 const debt = {
+  repayment: {
+    groupTitle: 'Trả một khoản chung cho người này',
+    receiveGroup: 'Nhận trả nợ chung',
+    payGroup: 'Trả nợ chung',
+    title: 'Ghi nhận trả nợ',
+    remaining: 'Còn lại',
+    original: 'Số tiền gốc',
+    paid: 'Đã trả',
+    settled: 'Đã trả hết',
+    history: 'Lịch sử trả nợ',
+    receive: 'Nhận tiền trả nợ',
+    pay: 'Trả tiền đã mượn',
+    full: 'Trả hết',
+    amount: 'Số tiền trả (VND)',
+    oldestFirst:
+      'Phân bổ cho các khoản nợ cùng chiều của người này, ưu tiên ngày mượn cũ nhất. Áp dụng cho tất cả khoản nợ, kể cả ngoài bộ lọc tìm kiếm.',
+    preview: 'Phân bổ khoản trả',
+    invalid: 'Nhập số tiền lớn hơn 0 và không vượt quá dư nợ.',
+    failed: 'Không thể ghi nhận khoản trả. Hãy tải lại dữ liệu và thử lại.',
+    saving: 'Đang lưu…',
+    confirm: 'Xác nhận trả nợ',
+  },
   title: 'Sổ Nợ',
   subtitle: 'Theo dõi tiền cho mượn và đi mượn',
   addTransaction: 'Thêm Giao Dịch',
-  addNewTraction: 'Thêm Giao Dịch Mới',
+  addNewTransaction: 'Thêm Giao Dịch Mới',
+  workspace: {
+    all: 'Tất cả',
+    lent: 'Phải thu',
+    borrowed: 'Phải trả',
+    receivable: 'Còn phải thu',
+    payable: 'Còn phải trả',
+    balanced: 'Đã cân bằng',
+    wholeBalance: 'Số dư toàn bộ · sau bù trừ theo từng người',
+    balanceFilter: 'Lọc theo số dư',
+    filteredPeople:
+      'Hiển thị người có giao dịch khớp bộ lọc. Số dư và số giao dịch trên thẻ vẫn tính toàn bộ.',
+    filteredTransactions:
+      '{{count}} giao dịch theo bộ lọc. Số dư phía trên vẫn tính toàn bộ.',
+    back: 'Về Sổ nợ',
+    transactions: 'Giao dịch hai chiều',
+    reconcile: 'Đối chiếu và xóa nhóm bù trừ',
+    grossTotals:
+      'Còn phải thu: {{lent}} · Còn phải trả: {{borrowed}} (trước bù trừ)',
+    emptyTransactions: 'Không có giao dịch phù hợp.',
+    loading: 'Đang tải…',
+    saveFailed:
+      'Chưa lưu được giao dịch. Dữ liệu nhập vẫn được giữ, hãy thử lại.',
+  },
   updateTransaction: 'Chỉnh Sửa Giao Dịch',
   owedToMe: 'Người khác nợ tôi',
   iOwe: 'Tôi nợ người khác',
@@ -12,6 +57,21 @@ const debt = {
   morePaid: 'Trả nhiều hơn',
   lend: 'Cho mượn',
   borrow: 'Đi mượn',
+  matches: {
+    title: 'Gợi ý xóa các khoản bù trừ ({{count}} nhóm)',
+    hint: 'Các giao dịch cùng người có tổng cho mượn bằng tổng đi mượn, theo bộ lọc hiện tại. Mở từng nhóm để kiểm tra trước khi xóa. Gợi ý được cập nhật sau mỗi lần xóa.',
+    empty: 'Chưa tìm thấy nhóm giao dịch có tổng bằng nhau.',
+    limited:
+      'Chỉ tìm trong một số tổ hợp do số lượng giao dịch lớn. Hãy lọc thêm để tìm kỹ hơn.',
+    review: 'Xem và xóa nhóm',
+    confirmTitle: 'Xác nhận xóa nhóm bù trừ',
+    confirm:
+      'Xóa {{count}} giao dịch với tổng {{amount}} ở mỗi phía? Chênh lệch công nợ của người này không đổi.',
+    deleteGroup: 'Xóa cả nhóm',
+    deleting: 'Đang xóa…',
+    failed:
+      'Không thể xóa nhóm. Hãy thử lại hoặc đóng hộp thoại và tải lại dữ liệu.',
+  },
   form: {
     personName: 'Tên người cho/mượn',
     amount: 'Số tiền (VND)',

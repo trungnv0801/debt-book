@@ -1,9 +1,54 @@
 const debt = {
+  repayment: {
+    groupTitle: 'Repay multiple debts for this person',
+    receiveGroup: 'Receive group repayment',
+    payGroup: 'Repay multiple debts',
+    title: 'Record repayment',
+    remaining: 'Remaining',
+    original: 'Original amount',
+    paid: 'Paid',
+    settled: 'Fully repaid',
+    history: 'Repayment history',
+    receive: 'Receive repayment',
+    pay: 'Repay borrowed money',
+    full: 'Repay in full',
+    amount: 'Repayment amount (VND)',
+    oldestFirst:
+      "Allocate to this person's debts in the selected direction, oldest borrowing date first. All debts are included regardless of search filters.",
+    preview: 'Repayment allocation',
+    invalid: 'Enter a positive amount no greater than the remaining debt.',
+    failed: 'Could not record repayment. Refresh the debts and retry.',
+    saving: 'Saving…',
+    confirm: 'Confirm repayment',
+  },
   title: 'Debt Book',
   subtitle: 'Track money lent and borrowing',
   addTransaction: 'Add Transaction',
   updateTransaction: 'Update Transaction',
   addNewTransaction: 'Add New Transaction',
+  workspace: {
+    all: 'All',
+    lent: 'Receivable',
+    borrowed: 'Payable',
+    receivable: 'Remaining receivable',
+    payable: 'Remaining payable',
+    balanced: 'Balanced',
+    wholeBalance: 'Full balance · offset per person',
+    balanceFilter: 'Filter by balance',
+    filteredPeople:
+      'Showing people with matching transactions. Card balances and transaction counts still include all transactions.',
+    filteredTransactions:
+      '{{count}} filtered transactions. The balance above still includes all transactions.',
+    back: 'Back to Debt Book',
+    transactions: 'Lending and borrowing transactions',
+    reconcile: 'Review and delete offset groups',
+    grossTotals:
+      'Remaining lent: {{lent}} · Remaining borrowed: {{borrowed}} (before offset)',
+    emptyTransactions: 'No matching transactions.',
+    loading: 'Loading…',
+    saveFailed:
+      'Could not save the transaction. Your input has been preserved; please retry.',
+  },
   owedToMe: 'Others owe me',
   iOwe: 'I owe others',
   people: '{{count}} people',
@@ -12,6 +57,21 @@ const debt = {
   morePaid: 'More Paid',
   lend: 'Lend',
   borrow: 'Borrow',
+  matches: {
+    title: 'Suggested offset deletions ({{count}} groups)',
+    hint: 'Transactions for the same person with equal lent and borrowed totals, using the current filters. Expand each group to review before deleting. Suggestions refresh after each deletion.',
+    empty: 'No groups with equal totals found.',
+    limited:
+      'Only some combinations were searched because there are many transactions. Narrow the filters for a more thorough search.',
+    review: 'Review and delete group',
+    confirmTitle: 'Confirm offset group deletion',
+    confirm:
+      'Delete {{count}} transactions totaling {{amount}} on each side? This person’s net balance will stay the same.',
+    deleteGroup: 'Delete entire group',
+    deleting: 'Deleting…',
+    failed:
+      'Could not delete this group. Retry or close this dialog and reload the data.',
+  },
   form: {
     personName: 'Lender/Borrower Name',
     amount: 'Amount (VND)',

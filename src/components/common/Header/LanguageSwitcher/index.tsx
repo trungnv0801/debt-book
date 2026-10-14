@@ -14,9 +14,9 @@ export default function LanguageSwitcher() {
   return (
     <button
       onClick={toggleLanguage}
-      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white transition-all"
+      className="flex min-h-11 items-center gap-2 rounded-xl border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:bg-slate-800 hover:text-white"
     >
-      <Globe className="w-4 h-4" />
+      <Globe className="w-4 h-4" aria-hidden="true" />
       {i18n.language === 'en'
         ? t('language.vietnamese')
         : t('language.english')}
