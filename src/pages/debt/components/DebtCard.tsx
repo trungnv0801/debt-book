@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Calendar, Trash2, Edit2 } from 'lucide-react'
+import { Banknote, Calendar, Trash2, Edit2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Debt } from '@/types'
 import Modal from '@/components/common/Modal'
@@ -98,10 +98,16 @@ export const DebtCard: React.FC<DebtCardProps> = ({
           )}
         </div>
 
-        <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+        <div className="flex shrink-0 flex-col gap-2 sm:flex-row items-end">
           {onRepay && remaining > 0 && (
-            <button onClick={() => onRepay(debt)} className="ui-secondary">
-              {t('debt.repayment.title')}
+            <button
+              type="button"
+              onClick={() => onRepay(debt)}
+              aria-label={t('debt.repayment.title')}
+              title={t('debt.repayment.title')}
+              className="ui-icon-button bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20"
+            >
+              <Banknote className="w-5 h-5" aria-hidden="true" />
             </button>
           )}
           <button
